@@ -1,0 +1,11 @@
+## Interface: 11304
+## Title: BuffWatcher
+## Notes: Grid buff watcher
+## Author: YuntaoCao
+## Version: 1.0
+
+embeds.xml
+
+RaidInfo.lua
+BWMainWindow.lua
+BuffWatcher.lua
