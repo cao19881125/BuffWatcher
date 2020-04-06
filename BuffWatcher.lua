@@ -10,6 +10,9 @@ local BufMonitor = _G.BufMonitor
 
 local CreateFrame = CreateFrame
 
+local MonitorStat = 0  -- 自动监控状态，0 表示停止状态  1 表示启动状态
+local last_update_time = GetTime()
+
 BuffWatcher.events = CreateFrame("Frame")
 
 BuffWatcher.events:SetScript("OnEvent", function(self, event, ...)
@@ -28,6 +31,7 @@ function BuffWatcher:OnInitialize()
 			BuffWatcher.OnCheckButtonCallback,
 			BuffWatcher.OnMonitorButtonCallback)
     BWMainWindow:Hide()
+	BuffWatcher.events:SetScript("OnUpdate",BuffWatcher.OnUpdate)
 end
 
 function BuffWatcher:SetupMinimapBtn()
@@ -65,6 +69,23 @@ function BuffWatcher:OnDisable()
 end
 
 function BuffWatcher:InitData()
+
+end
+
+function BuffWatcher:OnUpdate()
+	if(MonitorStat ~= 1)then
+		return
+	end
+
+	local current_time = GetTime()
+
+	if((current_time - last_update_time) < 30 ) then
+        return
+    end
+
+	BuffWatcher:OnCheckButtonCallback()
+
+	last_update_time = current_time
 
 end
 
@@ -212,7 +233,12 @@ end
 
 function BuffWatcher:OnMonitorButtonCallback()
 	DEFAULT_CHAT_FRAME:AddMessage("Hello4")
-
+	if(MonitorStat == 0) then
+		MonitorStat = 1
+	elseif(MonitorStat == 1) then
+		MonitorStat = 0
+	end
+	BWMainWindow:SetMonitorStat(MonitorStat)
 end
 
 function BuffWatcher:OnMainWindowMoved()

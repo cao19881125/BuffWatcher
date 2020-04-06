@@ -51,6 +51,7 @@ end
 function BWMainWindow:CreateMainWindow()
     local frame = AceGUI:Create("Frame")
     frame:SetTitle("Buff监控")
+    frame:SetStatusText("监控状态:停止")
     frame:SetLayout("List")
     frame:SetWidth(84*SCALE_LENGTH)
     frame:SetHeight(57*SCALE_LENGTH)
@@ -466,6 +467,17 @@ function BWMainWindow:GetTankAllocation()
     return result
 end
 
+-- 设置自动监测状态的文字
+-- stat: 1 启动状态  0停止状态
+function BWMainWindow:SetMonitorStat(stat)
+    if(stat == 1)then
+        BWMainWindow.Buttons.MonitorButton:SetText("停止监测")
+        BWMainWindow.frame:SetStatusText("监控状态:启动")
+    elseif(stat == 0) then
+        BWMainWindow.Buttons.MonitorButton:SetText("启动监测")
+        BWMainWindow.frame:SetStatusText("监控状态:停止")
+    end
+end
 
 function BWMainWindow:RegistButtonCallBack(InitCallback,NotifyCallback,AllocateCallback,CheckCallback,MonitorCallback)
     BWMainWindow.Buttons.RestButton:SetCallback("OnClick", InitCallback)
