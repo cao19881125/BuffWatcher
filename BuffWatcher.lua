@@ -5,7 +5,8 @@ local BuffWatcher = _G.BuffWatcher
 local BWMainWindow = _G.BWMainWindow
 local RaidInfo = _G.RaidInfo
 local PlayerClassEnum = _G.PlayerClassEnum
-
+local Notifier = _G.Notifier
+local BufMonitor = _G.BufMonitor
 
 local CreateFrame = CreateFrame
 
@@ -21,14 +22,41 @@ end)
 
 function BuffWatcher:OnInitialize()
     BWMainWindow:CreateMainWindow()
-	BWMainWindow:RegistButtonCallBack(BuffWatcher.OnInitButtonCallBack,
+    BWMainWindow:RegistButtonCallBack(BuffWatcher.OnInitButtonCallBack,
 			BuffWatcher.OnNotifyButtonCallBack,
 			BuffWatcher.OnAllocateButtonCallback,
+			BuffWatcher.OnCheckButtonCallback,
 			BuffWatcher.OnMonitorButtonCallback)
-    BWMainWindow:Show()
+    BWMainWindow:Hide()
+end
+
+function BuffWatcher:SetupMinimapBtn()
+	local LDB = LibStub("LibDataBroker-1.1", true)
+	local LDBIcon = LDB and LibStub("LibDBIcon-1.0", true)
+
+	local BufferWatcherMinimapBtn = LDB:NewDataObject("BuffWatcher", {
+            type = "launcher",
+			text = "BuffWatcher",
+            icon = "Interface/Icons/ability_ambush.blp",
+            OnClick = function(_, button)
+                if button == "LeftButton" then
+					BWMainWindow:Show()
+				end
+            end,
+            OnTooltipShow = function(tt)
+                tt:AddLine("BuffWatcher")
+                tt:AddLine("自动分配全团buf，自动检测缺buf情况")
+            end,
+        })
+	local btnpos = {}
+	if LDBIcon then
+            LDBIcon:Register("BuffWatcher", BufferWatcherMinimapBtn, btnpos)
+	end
 end
 
 function BuffWatcher:OnEnable()
+
+	BuffWatcher:SetupMinimapBtn()
 
 end
 
@@ -63,6 +91,33 @@ end
 
 function BuffWatcher:OnNotifyButtonCallBack()
 	DEFAULT_CHAT_FRAME:AddMessage("Hello2")
+
+	local allocate_result = BWMainWindow:GetAllAllocation()
+	--DEFAULT_CHAT_FRAME:AddMessage(allocate_result.Knight["ZhengJiu"])
+	--DEFAULT_CHAT_FRAME:AddMessage("Hello2-1")
+	Notifier:NotifyToGrid(allocate_result)
+
+end
+
+function BuffWatcher:OnCheckButtonCallback()
+	BuffWatcher:CheckoutBuf()
+end
+
+function BuffWatcher:CheckoutBuf()
+
+	RaidInfo:LoadAllMember()
+	--RaidInfo:GenerateTestData()
+	local allocation_data = BWMainWindow.GetAllAllocation()
+	local players = {}
+	for gn,gp in pairs(RaidInfo.ByGroup) do
+		players[gn] = gp.players
+	end
+
+	local buflack = BufMonitor:BufCheck(allocation_data,players)
+	DEFAULT_CHAT_FRAME:AddMessage(buflack["PriestBlood"][1].Lacker[1])
+
+	local tanks = BWMainWindow:GetTankAllocation()
+	Notifier:NotifyBufLack(buflack,tanks)
 end
 
 function BuffWatcher:AllocateCaculate(data,pn)
@@ -157,6 +212,7 @@ end
 
 function BuffWatcher:OnMonitorButtonCallback()
 	DEFAULT_CHAT_FRAME:AddMessage("Hello4")
+
 end
 
 function BuffWatcher:OnMainWindowMoved()

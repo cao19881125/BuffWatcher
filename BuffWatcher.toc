@@ -6,6 +6,8 @@
 
 embeds.xml
 
+Notifier.lua
+BufMonitor.lua
 RaidInfo.lua
 BWMainWindow.lua
 BuffWatcher.lua

@@ -133,14 +133,15 @@ function BWMainWindow:CreateMainWindow()
     local ButtonGroup = BWMainWindow:CreateButtonGroup()
     frame:AddChild(ButtonGroup)
 
-    --BWMainWindow:TestAddItem()
-    --BWMainWindow:TestSetAllDropDown()
-    --BWMainWindow:TestSetOneSureName()
     BWMainWindow.frame = frame
 end
 
-function Show()
+function BWMainWindow:Show()
     BWMainWindow.frame:Show()
+end
+
+function BWMainWindow:Hide()
+    BWMainWindow.frame:Hide()
 end
 
 function BWMainWindow:CreateBufGroup(bufname)
@@ -303,7 +304,7 @@ function BWMainWindow:CreateButtonGroup()
 
     local SpaceLabel = AceGUI:Create("Label")
     SpaceLabel:SetText("  ")
-    SpaceLabel:SetWidth(40*SCALE_LENGTH)
+    SpaceLabel:SetWidth(30*SCALE_LENGTH)
     ButtonGroup:AddChild(SpaceLabel)
 
 
@@ -325,6 +326,12 @@ function BWMainWindow:CreateButtonGroup()
     NotifyButton:SetWidth(10*SCALE_LENGTH)
     ButtonGroup:AddChild(NotifyButton)
     BWMainWindow.Buttons.NotifyButton = NotifyButton
+
+    local CheckButton = AceGUI:Create("Button")
+    CheckButton:SetText("检查")
+    CheckButton:SetWidth(10*SCALE_LENGTH)
+    ButtonGroup:AddChild(CheckButton)
+    BWMainWindow.Buttons.CheckButton = CheckButton
 
 
     local MonitorButton = AceGUI:Create("Button")
@@ -460,10 +467,11 @@ function BWMainWindow:GetTankAllocation()
 end
 
 
-function BWMainWindow:RegistButtonCallBack(InitCallback,NotifyCallback,AllocateCallback,MonitorCallback)
+function BWMainWindow:RegistButtonCallBack(InitCallback,NotifyCallback,AllocateCallback,CheckCallback,MonitorCallback)
     BWMainWindow.Buttons.RestButton:SetCallback("OnClick", InitCallback)
     BWMainWindow.Buttons.NotifyButton:SetCallback("OnClick", NotifyCallback)
     BWMainWindow.Buttons.AllocateButton:SetCallback("OnClick", AllocateCallback)
+    BWMainWindow.Buttons.CheckButton:SetCallback("OnClick", CheckCallback)
     BWMainWindow.Buttons.MonitorButton:SetCallback("OnClick", MonitorCallback)
 end
 
