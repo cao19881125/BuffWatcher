@@ -71,7 +71,7 @@ function RaidInfo:LoadAllMember()
             for j=1,40 do
                 local name,_,_,_,_,_,_,_,_,spellId = UnitBuff("raid"..i,j)
                 if(name) then
-                    p.bufs[#p.bufs + 1] = spellId
+                    p.bufs[spellId] = name
                 end
             end
 
