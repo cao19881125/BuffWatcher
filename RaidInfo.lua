@@ -13,11 +13,12 @@ PlayerClassEnum = {
     PALADIN=9       --圣骑士
 }
 
-function PlayerInfo:new(name,subgroup,class)
+function PlayerInfo:new(name,subgroup,class,isDead)
     local o ={
         name = name,
         subgroup = subgroup,
-        class = class,
+        class = class,   -- 整数类型  1,2,3,4... PlayerClassEnum["WARRIOR"] = 1
+        isDead = isDead,
         bufs = {} -- buf table,保存格式 {[10157]="奥术智慧",[10220]="冰甲术"}
     }
 
@@ -64,9 +65,9 @@ function RaidInfo:LoadAllMember()
         RaidInfo.ByClass[key] = {}
     end
     for i = 1,40 do
-        local name,_,subgroup,_,_,class = GetRaidRosterInfo(i)
+        local name,_,subgroup,_,_,class,_,_,isDead = GetRaidRosterInfo(i)
         if(name)then
-            local p = PlayerInfo:new(name,subgroup,PlayerClassEnum[class])
+            local p = PlayerInfo:new(name,subgroup,PlayerClassEnum[class],isDead)
 
             for j=1,40 do
                 local name,_,_,_,_,_,_,_,_,spellId = UnitBuff("raid"..i,j)
@@ -116,7 +117,7 @@ function RaidInfo:GenerateTestData()
 
         local groupid = math.modf((i - 1)/5) + 1
 
-        local p = PlayerInfo:new(pc..i,groupid,PlayerClassEnum[pc])
+        local p = PlayerInfo:new(pc..i,groupid,PlayerClassEnum[pc],false)
         p.bufs = get_all_buf()
         RaidInfo.ByGroup[groupid].players[pc..i] = p
         RaidInfo.ByClass[pc][#RaidInfo.ByClass[pc] + 1] = p
@@ -124,8 +125,8 @@ function RaidInfo:GenerateTestData()
 
 
 
-    RaidInfo.ByClass["WARRIOR"][1].bufs[25895] = nil
-    RaidInfo.ByClass["ROGUE"][1].bufs[25895] = nil
+    RaidInfo.ByClass["DRUID"][1].bufs[25918] = nil
+    --RaidInfo.ByClass["ROGUE"][1].bufs[25895] = nil
     --RaidInfo.ByClass["HUNTER"][2].bufs[27681] = nil
     --RaidInfo.ByClass["WARLOCK"][3].bufs[25898] = nil
 

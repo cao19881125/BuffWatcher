@@ -133,11 +133,11 @@ function BuffWatcher:CheckoutBuf()
 	for gn,gp in pairs(RaidInfo.ByGroup) do
 		players[gn] = gp.players
 	end
-
-	local buflack = BufMonitor:BufCheck(allocation_data,players)
+	local tanks = BWMainWindow:GetTankAllocation()
+	local buflack = BufMonitor:BufCheck(allocation_data,players,tanks)
 	DEFAULT_CHAT_FRAME:AddMessage(buflack["PriestBlood"][1].Lacker[1])
 
-	local tanks = BWMainWindow:GetTankAllocation()
+
 	Notifier:NotifyBufLack(buflack,tanks)
 end
 

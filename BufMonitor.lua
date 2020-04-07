@@ -2,7 +2,18 @@
 
 BufMonitor = {}
 
+local function InArray(array,value)
+    if(not array) then
+        return false
+    end
+    for _,v in pairs(array) do
+        if(v == value) then
+            return true
+        end
+    end
 
+    return false
+end
 
 -- 检查buf
 --  allocation_data = {
@@ -51,7 +62,7 @@ BufMonitor = {}
 --    ZhiHui    = {}
 --  }
 
-function BufMonitor:BufCheck(allocation_data,players)
+function BufMonitor:BufCheck(allocation_data,players,tanks)
     local result = {
         PriestBlood = {},
         PriestSpirt = {},
@@ -75,8 +86,8 @@ function BufMonitor:BufCheck(allocation_data,players)
     -- 庇护： 小庇护：庇护祝福 20914     大庇护：强效庇护祝福 25899
     -- 光明： 小光明：光明祝福 19979     大光明：强效光明祝福 25890
     -- 智慧： 小智慧：智慧祝福 19854     大智慧：强效智慧祝福 25918
-
-    local function checkgroupbuf(buftype,bufid1,bufid2)
+    local PlayerClassEnum = _G.PlayerClassEnum
+    local function checkgroupbuf(buftype,bufid1,bufid2,exception_classs)
         for i = 1,8 do
             if(not result[buftype][i]) then
                 result[buftype][i] = {BufPlayer = "",Lacker={}}
@@ -87,8 +98,20 @@ function BufMonitor:BufCheck(allocation_data,players)
                 result[buftype][i]["BufPlayer"] = allocation_data.Knight[buftype]
             end
             for name,p in pairs(players[i]) do
-                if(not p.bufs[bufid1] and not p.bufs[bufid2]) then
-                    result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
+                if(not p.isDead and not p.bufs[bufid1] and not p.bufs[bufid2] and not InArray(exception_classs,p.class)) then
+                    --local str = "name:"..name .. " buftype:" .. buftype .. " class:"..p.class
+                    --DEFAULT_CHAT_FRAME:AddMessage(str)
+                    if(buftype == "LiLiang" and p.class == PlayerClassEnum["DRUID"] ) then
+                        if(InArray(tanks,name)) then
+                            result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
+                        end
+                    elseif(buftype == "ZhiHui" and p.class == PlayerClassEnum["DRUID"]) then
+                        if(not InArray(tanks,name)) then
+                            result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
+                        end
+                    else
+                        result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
+                    end
                 end
             end
         end
@@ -96,35 +119,42 @@ function BufMonitor:BufCheck(allocation_data,players)
 
 
     -- 检查牧师耐力
-    checkgroupbuf("PriestBlood",10938,21564)
+    checkgroupbuf("PriestBlood",10938,21564,nil)
     DEFAULT_CHAT_FRAME:AddMessage(result["PriestBlood"][1].Lacker[1])
 
     -- 检查牧师精神
-    checkgroupbuf("PriestSpirt",27841,27681)
+
+    local exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"],PlayerClassEnum["HUNTER"]}
+    checkgroupbuf("PriestSpirt",27841,27681,exception_classs)
 
     -- 检查法师智力
-    checkgroupbuf("MageIntelli",10157,23028)
+    exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"]}
+    checkgroupbuf("MageIntelli",10157,23028,exception_classs)
 
     -- 检查小德爪子
-    checkgroupbuf("DruidClaw",9885,21850)
+    checkgroupbuf("DruidClaw",9885,21850,nil)
 
     -- 检查王者
-    checkgroupbuf("WangZhe",20217,25898)
+    checkgroupbuf("WangZhe",20217,25898,nil)
 
     -- 检查力量
+    exception_classs = {PlayerClassEnum["MAGE"],PlayerClassEnum["PRIEST"],
+                        PlayerClassEnum["WARLOCK"],PlayerClassEnum["HUNTER"],
+                        PlayerClassEnum["PALADIN"]}
     checkgroupbuf("LiLiang",19838,25782)
 
     -- 检查拯救
-    checkgroupbuf("ZhengJiu",1038,25895)
+    checkgroupbuf("ZhengJiu",1038,25895,nil)
 
     -- 检查庇护
-    checkgroupbuf("BiHu",20914,25899)
+    checkgroupbuf("BiHu",20914,25899,nil)
 
     -- 检查光明
-    checkgroupbuf("GuangMing",19979,25890)
+    checkgroupbuf("GuangMing",19979,25890,nil)
 
     -- 检查智慧
-    checkgroupbuf("ZhiHui",19854,25918)
+    exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"]}
+    checkgroupbuf("ZhiHui",19854,25918,exception_classs)
 
     return result
 end
