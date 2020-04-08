@@ -3,6 +3,7 @@
 ## Notes: Grid buff watcher
 ## Author: YuntaoCao
 ## Version: 1.0
+## SavedVariables: BuffWatcherDB
 
 embeds.xml
 

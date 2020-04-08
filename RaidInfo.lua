@@ -125,9 +125,10 @@ function RaidInfo:GenerateTestData()
 
 
 
-    RaidInfo.ByClass["DRUID"][1].bufs[25918] = nil
-    --RaidInfo.ByClass["ROGUE"][1].bufs[25895] = nil
-    --RaidInfo.ByClass["HUNTER"][2].bufs[27681] = nil
+    --RaidInfo.ByClass["WARRIOR"][1].bufs[21564] = nil
+    --RaidInfo.ByClass["ROGUE"][1].bufs[21564] = nil
+    --RaidInfo.ByClass["HUNTER"][2].bufs[21564] = nil
+    --RaidInfo.ByClass["HUNTER"][2].bufs[25898] = nil
     --RaidInfo.ByClass["WARLOCK"][3].bufs[25898] = nil
 
 end

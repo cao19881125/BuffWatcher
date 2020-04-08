@@ -37,15 +37,24 @@ BWMainWindow = {
         NotifyButton = nil,
         AllocateButton = nil,
         MonitorButton = nil
+    },
+    Config = {
+        NotifyCheckbox = {
+            RaidBox = nil,
+            PersonBox = nil
+        },
+        AutoCheck = {
+            IntervalEditBox = nil
+        }
     }
 }
 
 local SCALE_LENGTH = 10
 
 
-function BWMainWindow:ChangeFontSize(f,size)
-    local Font, Height, Flags = f.text:GetFont()
-    f.text:SetFont(Font, size, Flags)
+function BWMainWindow:ChangeFontSize(fontString,size)
+    local Font, Height, Flags = fontString:GetFont()
+    fontString:SetFont(Font, size, Flags)
 end
 
 function BWMainWindow:CreateMainWindow()
@@ -54,7 +63,7 @@ function BWMainWindow:CreateMainWindow()
     frame:SetStatusText("监控状态:停止")
     frame:SetLayout("List")
     frame:SetWidth(84*SCALE_LENGTH)
-    frame:SetHeight(57*SCALE_LENGTH)
+    frame:SetHeight(65*SCALE_LENGTH)
     --frame.frame:SetResizable(false)
 
 
@@ -131,6 +140,17 @@ function BWMainWindow:CreateMainWindow()
     Flow2List2:AddChild(TankGroup)
     BWMainWindow.DropDownBox["Tank"] = dropdownarray
 
+
+    --local FlowLayout3 = AceGUI:Create("SimpleGroup")
+    --FlowLayout3:SetLayout("Flow")
+    --FlowLayout3:SetWidth(84*SCALE_LENGTH)
+    --FlowLayout3:SetHeight(10*SCALE_LENGTH)
+    --frame:AddChild(FlowLayout3)
+
+    local ConfigGroup = BWMainWindow:CreateConfigGroup()
+    frame:AddChild(ConfigGroup)
+
+
     local ButtonGroup = BWMainWindow:CreateButtonGroup()
     frame:AddChild(ButtonGroup)
 
@@ -185,12 +205,14 @@ function BWMainWindow:CreateTwoGroupGroupDown(label1,label2)
 
     local OneGroupDropDown = AceGUI:Create("Dropdown2")
     OneGroupDropDown:SetLabel(label1)
+    OneGroupDropDown:SetText("<空>")
     OneGroupDropDown:SetWidth(15*SCALE_LENGTH)
     OneGroupDropDown:SetHeight(SCALE_LENGTH)
     OneTwoGroup:AddChild(OneGroupDropDown)
 
     local TwoGroupDropDown = AceGUI:Create("Dropdown2")
     TwoGroupDropDown:SetLabel(label2)
+    TwoGroupDropDown:SetText("<空>")
     TwoGroupDropDown:SetWidth(15*SCALE_LENGTH)
     TwoGroupDropDown:SetHeight(SCALE_LENGTH)
     OneTwoGroup:AddChild(TwoGroupDropDown)
@@ -209,6 +231,7 @@ function BWMainWindow:CreateKnightBufGroup()
 
     local WangZheDropDown = AceGUI:Create("Dropdown2")
     WangZheDropDown:SetLabel("王者")
+    WangZheDropDown:SetText("<空>")
     WangZheDropDown:SetWidth(15*SCALE_LENGTH)
     WangZheDropDown:SetHeight(5*SCALE_LENGTH)
     --WangZheDropDown:SetText("MAGE11")
@@ -218,6 +241,7 @@ function BWMainWindow:CreateKnightBufGroup()
 
     local ZhengJiuDropDown = AceGUI:Create("Dropdown2")
     ZhengJiuDropDown:SetLabel("拯救")
+    ZhengJiuDropDown:SetText("<空>")
     ZhengJiuDropDown:SetWidth(15*SCALE_LENGTH)
     ZhengJiuDropDown:SetHeight(5*SCALE_LENGTH)
     KnightGroup:AddChild(ZhengJiuDropDown)
@@ -225,6 +249,7 @@ function BWMainWindow:CreateKnightBufGroup()
 
     local GuangMingDropDown = AceGUI:Create("Dropdown2")
     GuangMingDropDown:SetLabel("光明")
+    GuangMingDropDown:SetText("<空>")
     GuangMingDropDown:SetWidth(15*SCALE_LENGTH)
     GuangMingDropDown:SetHeight(5*SCALE_LENGTH)
     KnightGroup:AddChild(GuangMingDropDown)
@@ -232,6 +257,7 @@ function BWMainWindow:CreateKnightBufGroup()
 
     local LiLiangDropDown = AceGUI:Create("Dropdown2")
     LiLiangDropDown:SetLabel("力量")
+    LiLiangDropDown:SetText("<空>")
     LiLiangDropDown:SetWidth(15*SCALE_LENGTH)
     LiLiangDropDown:SetHeight(5*SCALE_LENGTH)
     KnightGroup:AddChild(LiLiangDropDown)
@@ -239,6 +265,7 @@ function BWMainWindow:CreateKnightBufGroup()
 
     local ZhiHuiDropDown = AceGUI:Create("Dropdown2")
     ZhiHuiDropDown:SetLabel("智慧")
+    ZhiHuiDropDown:SetText("<空>")
     ZhiHuiDropDown:SetWidth(15*SCALE_LENGTH)
     ZhiHuiDropDown:SetHeight(5*SCALE_LENGTH)
     KnightGroup:AddChild(ZhiHuiDropDown)
@@ -246,6 +273,7 @@ function BWMainWindow:CreateKnightBufGroup()
 
     local BiHuDropDown = AceGUI:Create("Dropdown2")
     BiHuDropDown:SetLabel("庇护")
+    BiHuDropDown:SetText("<空>")
     BiHuDropDown:SetWidth(15*SCALE_LENGTH)
     BiHuDropDown:SetHeight(5*SCALE_LENGTH)
     KnightGroup:AddChild(BiHuDropDown)
@@ -297,6 +325,69 @@ function BWMainWindow:CreateTankGroup()
     return TankGroup,DropdownArray
 end
 
+function BWMainWindow:CreateConfigGroup()
+
+    local FlowLayout3 = AceGUI:Create("SimpleGroup")
+    FlowLayout3:SetLayout("Flow")
+    FlowLayout3:SetWidth(84*SCALE_LENGTH)
+    FlowLayout3:SetHeight(10*SCALE_LENGTH)
+
+    local ConfigGroup = AceGUI:Create("InlineGroup")
+    ConfigGroup:SetLayout("Flow")
+    ConfigGroup:SetTitle("检查通报")
+    ConfigGroup:SetWidth(13*SCALE_LENGTH)
+    ConfigGroup:SetHeight(4*SCALE_LENGTH)
+    FlowLayout3:AddChild(ConfigGroup)
+
+    local NotifyGroup = AceGUI:Create("SimpleGroup")
+    NotifyGroup:SetLayout("Flow")
+    NotifyGroup:SetWidth(13*SCALE_LENGTH)
+    NotifyGroup:SetHeight(4*SCALE_LENGTH)
+    ConfigGroup:AddChild(NotifyGroup)
+
+
+    local RaidCheckbox = AceGUI:Create("CheckBox")
+    RaidCheckbox:SetLabel("团队")
+    RaidCheckbox:SetWidth(5*SCALE_LENGTH)
+    RaidCheckbox:SetHeight(4*SCALE_LENGTH)
+    BWMainWindow:ChangeFontSize(RaidCheckbox.text,12)
+    NotifyGroup:AddChild(RaidCheckbox)
+    BWMainWindow.Config.NotifyCheckbox.RaidBox = RaidCheckbox
+    --
+    local PersonCheckbox = AceGUI:Create("CheckBox")
+    PersonCheckbox:SetLabel("私聊")
+    PersonCheckbox:SetWidth(5*SCALE_LENGTH)
+    PersonCheckbox:SetHeight(4*SCALE_LENGTH)
+    BWMainWindow:ChangeFontSize(PersonCheckbox.text,12)
+    NotifyGroup:AddChild(PersonCheckbox)
+    BWMainWindow.Config.NotifyCheckbox.PersonBox = PersonCheckbox
+
+    local AutoCheckGroup = AceGUI:Create("InlineGroup")
+    AutoCheckGroup:SetLayout("Flow")
+    AutoCheckGroup:SetTitle("自动检查")
+    AutoCheckGroup:SetWidth(13*SCALE_LENGTH)
+    AutoCheckGroup:SetHeight(4*SCALE_LENGTH)
+    FlowLayout3:AddChild(AutoCheckGroup)
+
+    --local CheckIntervalLabel = AceGUI:Create("Label")
+    --CheckIntervalLabel:SetText("间隔(秒)")
+    --CheckIntervalLabel:SetJustifyV("MIDDLE")
+    --BWMainWindow:ChangeFontSize(CheckIntervalLabel.label,12)
+    --CheckIntervalLabel:SetWidth(3*SCALE_LENGTH)
+    --CheckIntervalLabel:SetHeight(4*SCALE_LENGTH)
+    --AutoCheckGroup:AddChild(CheckIntervalLabel)
+
+    local AutoCheckEditBox = AceGUI:Create("EditBox")
+    AutoCheckEditBox:SetLabel("间隔(秒)")
+    BWMainWindow:ChangeFontSize(AutoCheckEditBox.label,12)
+    AutoCheckEditBox:SetWidth(10*SCALE_LENGTH)
+    AutoCheckEditBox:SetHeight(4*SCALE_LENGTH)
+    AutoCheckGroup:AddChild(AutoCheckEditBox)
+    BWMainWindow.Config.AutoCheck.IntervalEditBox = AutoCheckEditBox
+
+    return FlowLayout3
+end
+
 function BWMainWindow:CreateButtonGroup()
     local ButtonGroup = AceGUI:Create("SimpleGroup")
     ButtonGroup:SetLayout("Flow")
@@ -305,8 +396,9 @@ function BWMainWindow:CreateButtonGroup()
 
     local SpaceLabel = AceGUI:Create("Label")
     SpaceLabel:SetText("  ")
-    SpaceLabel:SetWidth(30*SCALE_LENGTH)
+    SpaceLabel:SetWidth(29*SCALE_LENGTH)
     ButtonGroup:AddChild(SpaceLabel)
+
 
 
     local RestButton = AceGUI:Create("Button")
@@ -336,12 +428,33 @@ function BWMainWindow:CreateButtonGroup()
 
 
     local MonitorButton = AceGUI:Create("Button")
-    MonitorButton:SetText("开启监测")
-    MonitorButton:SetWidth(10*SCALE_LENGTH)
+    MonitorButton:SetText("开启自动检查")
+    BWMainWindow:ChangeFontSize(MonitorButton.text,12)
+    MonitorButton:SetWidth(11*SCALE_LENGTH)
     ButtonGroup:AddChild(MonitorButton)
     BWMainWindow.Buttons.MonitorButton = MonitorButton
 
     return ButtonGroup
+end
+
+
+-- 设置检查通知按钮值
+-- RaidNotify: 团队通报 True/False
+-- PersonNotify: 私聊通报   True/False
+function BWMainWindow:SetNotifyInfo(RaidNotify,PersonNotify)
+    BWMainWindow.Config.NotifyCheckbox.RaidBox:SetValue(RaidNotify)
+    BWMainWindow.Config.NotifyCheckbox.PersonBox:SetValue(PersonNotify)
+end
+
+-- 获取检查通知选取结果
+-- return RaidNotify,PersonNotify
+function BWMainWindow:GetNotifyInfo()
+    return BWMainWindow.Config.NotifyCheckbox.RaidBox:GetValue(),BWMainWindow.Config.NotifyCheckbox.PersonBox:GetValue()
+end
+
+-- 获取自动检查间隔值
+function BWMainWindow:GetAutocheckIntervalEditText()
+    return BWMainWindow.Config.AutoCheck.IntervalEditBox:GetText()
 end
 
 -- data: 包含所有职业名称的数据结构，如下
@@ -355,6 +468,10 @@ end
 --}
 
 function BWMainWindow:SetAllDropDown(data)
+
+    for _,value in pairs(data) do
+        value[#value + 1] = "<空>"
+    end
 
     -- 设置牧师，法师，小德列表
     for i =1,8 do
@@ -446,6 +563,14 @@ function BWMainWindow:GetAllAllocation()
         result["Warlock"][key] = value:GetText()
     end
 
+    for _,bufarray in pairs(result) do
+        for key,value in pairs(bufarray) do
+            if(value == "<空>") then
+                bufarray[key] = nil
+            end
+        end
+    end
+
     return result
 end
 
@@ -461,7 +586,10 @@ function BWMainWindow:GetTankAllocation()
     local result = {}
 
     for i = 1,4 do
-        result[i] = BWMainWindow.DropDownBox.Tank[i]:GetText()
+        local name = BWMainWindow.DropDownBox.Tank[i]:GetText()
+        if(name and name ~= "<空>") then
+            result[i] = name
+        end
     end
 
     return result
@@ -471,13 +599,22 @@ end
 -- stat: 1 启动状态  0停止状态
 function BWMainWindow:SetMonitorStat(stat)
     if(stat == 1)then
-        BWMainWindow.Buttons.MonitorButton:SetText("停止监测")
+        BWMainWindow.Buttons.MonitorButton:SetText("停止自动检查")
         BWMainWindow.frame:SetStatusText("监控状态:启动")
     elseif(stat == 0) then
-        BWMainWindow.Buttons.MonitorButton:SetText("启动监测")
+        BWMainWindow.Buttons.MonitorButton:SetText("开启自动检查")
         BWMainWindow.frame:SetStatusText("监控状态:停止")
     end
 end
+
+function BWMainWindow:SetAutoCheckInterval(value)
+    if(type(value) ~= "number") then
+        return
+    end
+    BWMainWindow.Config.AutoCheck.IntervalEditBox:SetText(value)
+end
+
+
 
 function BWMainWindow:RegistButtonCallBack(InitCallback,NotifyCallback,AllocateCallback,CheckCallback,MonitorCallback)
     BWMainWindow.Buttons.RestButton:SetCallback("OnClick", InitCallback)
@@ -485,6 +622,15 @@ function BWMainWindow:RegistButtonCallBack(InitCallback,NotifyCallback,AllocateC
     BWMainWindow.Buttons.AllocateButton:SetCallback("OnClick", AllocateCallback)
     BWMainWindow.Buttons.CheckButton:SetCallback("OnClick", CheckCallback)
     BWMainWindow.Buttons.MonitorButton:SetCallback("OnClick", MonitorCallback)
+end
+
+function BWMainWindow:RegistNotifyBoxCallBack(NotifyBoxCallBack)
+    BWMainWindow.Config.NotifyCheckbox.RaidBox:SetCallback("OnValueChanged", NotifyBoxCallBack)
+    BWMainWindow.Config.NotifyCheckbox.PersonBox:SetCallback("OnValueChanged", NotifyBoxCallBack)
+end
+
+function BWMainWindow:RegistAutocheckIntervalEditCallBack(AutocheckIntervalEditCallBack)
+    BWMainWindow.Config.AutoCheck.IntervalEditBox:SetCallback("OnEnterPressed", AutocheckIntervalEditCallBack)
 end
 
 ------------------ Test Function--------------------

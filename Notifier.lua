@@ -172,7 +172,7 @@ end
 --    ZhiHui    = {}
 --  }
 
-function Notifier:NotifyBufLack(buflack,tanks)
+function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
 
 
     local bufname_to_cn = {
@@ -198,11 +198,15 @@ function Notifier:NotifyBufLack(buflack,tanks)
         return false
     end
 
+    if(raidNotify) then
+        _G.SendChatMessage("BufferWatcher插件全团BUF检查:","GUILD",nil,nil)
+    end
+    local noProblem = true
     for i =1,8 do
         for bufe,bufc in pairs(bufname_to_cn) do
             while true do
                 if (buflack[bufe] and #buflack[bufe][i]["Lacker"] > 0) then
-                    local str = "BuffWatcher插件提醒:" .. i .. "队 "
+                    local str = "[" .. bufc .. "]" .. " <" .. i .. "队> "
                     local n = 0
                     for _,name in pairs(buflack[bufe][i]["Lacker"]) do
                         if(bufe == "ZhengJiu" and in_tanks(name))then
@@ -216,19 +220,26 @@ function Notifier:NotifyBufLack(buflack,tanks)
                     if(n == 0) then
                         break
                     end
-                    str = str .. "缺少" .. bufc
                     if(buflack[bufe][i]["BufPlayer"]) then
-                        str = str .. " 请刷buf"
-                        --_G.SendChatMessage(str,"WHISPER",nil,buflack[bufe][i]["BufPlayer"])
-                        --_G.SendChatMessage(str,"RAID",nil,nil)
+                        local whisper_str = str .. " 请刷buf"
+
+                        if(personNotify)then
+                            _G.SendChatMessage(whisper_str,"WHISPER",nil,buflack[bufe][i]["BufPlayer"])
+                        end
 
                         --测试先发到公会频道
-                        str = str .. " 责任人:" .. buflack[bufe][i]["BufPlayer"]
-                        _G.SendChatMessage(str,"GUILD",nil,nil)
+                        str = str .. " *责任人* " .. buflack[bufe][i]["BufPlayer"]
+                        if(raidNotify) then
+                            _G.SendChatMessage(str,"GUILD",nil,nil)
+                        end
+                        noProblem = false
                     else
-                        str = str .. " 未指定负责人，请指定"
+                        str = str .. " *未指定负责人*"
                         --_G.SendChatMessage(str,"RAID",nil,nil)
-                        _G.SendChatMessage(str,"GUILD",nil,nil)
+                        if(raidNotify) then
+                            _G.SendChatMessage(str,"GUILD",nil,nil)
+                        end
+                        noProblem = false
                     end
                 end
                 break
@@ -255,11 +266,23 @@ function Notifier:NotifyBufLack(buflack,tanks)
         end
 
         if(not has_lack)then
-            local str = "BuffWatcher插件提醒:" .. name .. " 请点掉拯救"
-            _G.SendChatMessage(str,"GUILD",nil,nil)
+            local raidstr = name .. " 请点掉拯救"
+            local whisperstr = "BuffWatcher插件提醒:" .. name .. " 请点掉拯救"
+            if(raidNotify) then
+                _G.SendChatMessage(raidstr,"GUILD",nil,nil)
+            end
+
+            if(personNotify)then
+                _G.SendChatMessage(whisperstr,"WHISPER",nil,name)
+            end
+
+            noProblem = false
         end
     end
 
+    if(noProblem and raidNotify) then
+        _G.SendChatMessage("Buff全部正常","GUILD",nil,nil)
+    end
 
 
 end

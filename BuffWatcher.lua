@@ -15,6 +15,25 @@ local last_update_time = GetTime()
 
 BuffWatcher.events = CreateFrame("Frame")
 
+local Default_Profile = {
+    profile = {
+        MainWindow = {
+            Position = {
+				point = "CENTER",
+                x = 0,
+                y = 0
+			},
+			NotifyBox = {
+				RaidNotify = true,
+				PersonNotify = false
+			},
+			AutoCheck = {
+				Interval = 30
+			}
+        }
+    }
+}
+
 BuffWatcher.events:SetScript("OnEvent", function(self, event, ...)
 	if not BuffWatcher[event] then
 		return
@@ -24,12 +43,19 @@ BuffWatcher.events:SetScript("OnEvent", function(self, event, ...)
 end)
 
 function BuffWatcher:OnInitialize()
+	local acedb = LibStub("AceDB-3.0")
+	BWMainWindow.db = acedb:New("BuffWatcherDB",Default_Profile)
+
     BWMainWindow:CreateMainWindow()
     BWMainWindow:RegistButtonCallBack(BuffWatcher.OnInitButtonCallBack,
 			BuffWatcher.OnNotifyButtonCallBack,
 			BuffWatcher.OnAllocateButtonCallback,
 			BuffWatcher.OnCheckButtonCallback,
 			BuffWatcher.OnMonitorButtonCallback)
+	BWMainWindow:RegistNotifyBoxCallBack(BuffWatcher.OnNotifyBoxCallBack)
+	BWMainWindow:RegistAutocheckIntervalEditCallBack(BuffWatcher.OnAutocheckIntervalEditCallBack)
+	BWMainWindow:SetNotifyInfo(BWMainWindow.db.profile.MainWindow.NotifyBox.RaidNotify,BWMainWindow.db.profile.MainWindow.NotifyBox.PersonNotify)
+	BWMainWindow:SetAutoCheckInterval(BWMainWindow.db.profile.MainWindow.AutoCheck.Interval)
     BWMainWindow:Hide()
 	BuffWatcher.events:SetScript("OnUpdate",BuffWatcher.OnUpdate)
 end
@@ -79,7 +105,7 @@ function BuffWatcher:OnUpdate()
 
 	local current_time = GetTime()
 
-	if((current_time - last_update_time) < 30 ) then
+	if((current_time - last_update_time) < BWMainWindow.db.profile.MainWindow.AutoCheck.Interval ) then
         return
     end
 
@@ -135,10 +161,25 @@ function BuffWatcher:CheckoutBuf()
 	end
 	local tanks = BWMainWindow:GetTankAllocation()
 	local buflack = BufMonitor:BufCheck(allocation_data,players,tanks)
-	DEFAULT_CHAT_FRAME:AddMessage(buflack["PriestBlood"][1].Lacker[1])
+	--DEFAULT_CHAT_FRAME:AddMessage(buflack["PriestBlood"][1].Lacker[1])
 
+	local raidNotify,personNotify = BWMainWindow:GetNotifyInfo()
+	Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
+end
 
-	Notifier:NotifyBufLack(buflack,tanks)
+function BuffWatcher:OnNotifyBoxCallBack(value)
+	local raidNotify,personNotify = BWMainWindow:GetNotifyInfo()
+	BWMainWindow.db.profile.MainWindow.NotifyBox.RaidNotify = raidNotify
+	BWMainWindow.db.profile.MainWindow.NotifyBox.PersonNotify = personNotify
+end
+
+function BuffWatcher:OnAutocheckIntervalEditCallBack()
+	local value = BWMainWindow:GetAutocheckIntervalEditText()
+	local nv = tonumber(value)
+	DEFAULT_CHAT_FRAME:AddMessage(value)
+	if(nv) then
+		BWMainWindow.db.profile.MainWindow.AutoCheck.Interval = nv
+	end
 end
 
 function BuffWatcher:AllocateCaculate(data,pn)
