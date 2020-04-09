@@ -30,6 +30,7 @@ end
 --      ...
 --      [8] = {["张三"]=PlayerInfo,["李四"]=PlayerInfo,..}
 --  }
+--  exception_players = {"张三","李四"}  --剔除名单，在此名单中的玩家不检查
 -- return = {
 --    PriestBlood = {
 --        [1] = {
@@ -62,7 +63,7 @@ end
 --    ZhiHui    = {}
 --  }
 
-function BufMonitor:BufCheck(allocation_data,players,tanks)
+function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     local result = {
         PriestBlood = {},
         PriestSpirt = {},
@@ -85,7 +86,7 @@ function BufMonitor:BufCheck(allocation_data,players,tanks)
     -- 拯救： 小拯救：拯救祝福 1038      大拯救：强效拯救祝福 25895
     -- 庇护： 小庇护：庇护祝福 20914     大庇护：强效庇护祝福 25899
     -- 光明： 小光明：光明祝福 19979     大光明：强效光明祝福 25890
-    -- 智慧： 小智慧：智慧祝福 19854     大智慧：强效智慧祝福 25918
+    -- 智慧： 小智慧：智慧祝福 19854     大智慧：强效智慧祝福 25894
     local PlayerClassEnum = _G.PlayerClassEnum
     local function checkgroupbuf(buftype,bufid1,bufid2,exception_classs)
         for i = 1,8 do
@@ -98,7 +99,11 @@ function BufMonitor:BufCheck(allocation_data,players,tanks)
                 result[buftype][i]["BufPlayer"] = allocation_data.Knight[buftype]
             end
             for name,p in pairs(players[i]) do
-                if(not p.isDead and not p.bufs[bufid1] and not p.bufs[bufid2] and not InArray(exception_classs,p.class)) then
+                if(not InArray(exception_players,name)
+                        and not p.isDead
+                        and not p.bufs[bufid1]
+                        and not p.bufs[bufid2]
+                        and not InArray(exception_classs,p.class)) then
                     --local str = "name:"..name .. " buftype:" .. buftype .. " class:"..p.class
                     --DEFAULT_CHAT_FRAME:AddMessage(str)
                     if(buftype == "LiLiang" and p.class == PlayerClassEnum["DRUID"] ) then
@@ -120,7 +125,6 @@ function BufMonitor:BufCheck(allocation_data,players,tanks)
 
     -- 检查牧师耐力
     checkgroupbuf("PriestBlood",10938,21564,nil)
-    DEFAULT_CHAT_FRAME:AddMessage(result["PriestBlood"][1].Lacker[1])
 
     -- 检查牧师精神
 
@@ -141,7 +145,7 @@ function BufMonitor:BufCheck(allocation_data,players,tanks)
     exception_classs = {PlayerClassEnum["MAGE"],PlayerClassEnum["PRIEST"],
                         PlayerClassEnum["WARLOCK"],PlayerClassEnum["HUNTER"],
                         PlayerClassEnum["PALADIN"]}
-    checkgroupbuf("LiLiang",19838,25782)
+    checkgroupbuf("LiLiang",19838,25782,exception_classs)
 
     -- 检查拯救
     checkgroupbuf("ZhengJiu",1038,25895,nil)
@@ -154,7 +158,7 @@ function BufMonitor:BufCheck(allocation_data,players,tanks)
 
     -- 检查智慧
     exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"]}
-    checkgroupbuf("ZhiHui",19854,25918,exception_classs)
+    checkgroupbuf("ZhiHui",19854,25894,exception_classs)
 
     return result
 end

@@ -396,9 +396,8 @@ function BWMainWindow:CreateButtonGroup()
 
     local SpaceLabel = AceGUI:Create("Label")
     SpaceLabel:SetText("  ")
-    SpaceLabel:SetWidth(29*SCALE_LENGTH)
+    SpaceLabel:SetWidth(19*SCALE_LENGTH)
     ButtonGroup:AddChild(SpaceLabel)
-
 
 
     local RestButton = AceGUI:Create("Button")
@@ -420,6 +419,13 @@ function BWMainWindow:CreateButtonGroup()
     ButtonGroup:AddChild(NotifyButton)
     BWMainWindow.Buttons.NotifyButton = NotifyButton
 
+    local CheckConfigButton = AceGUI:Create("Button")
+    CheckConfigButton:SetText("检查设置")
+    CheckConfigButton:SetWidth(10*SCALE_LENGTH)
+    ButtonGroup:AddChild(CheckConfigButton)
+    CheckConfigButton:SetCallback("OnClick", BWMainWindow.OnCheckConfigButtonClick)
+    BWMainWindow.Buttons.CheckConfigButton = CheckConfigButton
+
     local CheckButton = AceGUI:Create("Button")
     CheckButton:SetText("检查")
     CheckButton:SetWidth(10*SCALE_LENGTH)
@@ -437,6 +443,10 @@ function BWMainWindow:CreateButtonGroup()
     return ButtonGroup
 end
 
+
+function BWMainWindow:OnCheckConfigButtonClick()
+    _G.BWCheckPlayerWindow:Show()
+end
 
 -- 设置检查通知按钮值
 -- RaidNotify: 团队通报 True/False

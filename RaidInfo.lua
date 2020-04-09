@@ -104,7 +104,7 @@ function RaidInfo:GenerateTestData()
             [25895] = "强效拯救祝福",
             [25899] = "强效庇护祝福",
             [25890] = "强效光明祝福",
-            [25918] = "强效智慧祝福"
+            [25894] = "强效智慧祝福"
         }
     end
 
@@ -125,11 +125,12 @@ function RaidInfo:GenerateTestData()
 
 
 
-    --RaidInfo.ByClass["WARRIOR"][1].bufs[21564] = nil
+    RaidInfo.ByClass["WARRIOR"][1].bufs[21564] = nil
     --RaidInfo.ByClass["ROGUE"][1].bufs[21564] = nil
     --RaidInfo.ByClass["HUNTER"][2].bufs[21564] = nil
     --RaidInfo.ByClass["HUNTER"][2].bufs[25898] = nil
     --RaidInfo.ByClass["WARLOCK"][3].bufs[25898] = nil
+    --RaidInfo.ByClass["MAGE"][1].bufs[25782] = nil
 
 end
 

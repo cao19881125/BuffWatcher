@@ -33,7 +33,6 @@ Notifier = {}
 
 function Notifier:TransAllocationResultToByName(allcate_data)
 
-    DEFAULT_CHAT_FRAME:AddMessage("TransAllocationResultToByName 1")
     local result = {
         PriestBlood = {},
         PriestSpirt = {},
@@ -51,21 +50,18 @@ function Notifier:TransAllocationResultToByName(allcate_data)
             result[buftype][name][#result[buftype][name] +1] = gn
         end
     end
-    DEFAULT_CHAT_FRAME:AddMessage("TransAllocationResultToByName 2")
     for buftype,name in pairs(allcate_data.Knight) do
         if(not result.Knight[name]) then
             result.Knight[name] = {}
         end
         result.Knight[name][#result.Knight[name] + 1] = buftype
     end
-    DEFAULT_CHAT_FRAME:AddMessage("TransAllocationResultToByName 3")
     for buftype,name in pairs(allcate_data.Warlock) do
         if(not result.Warlock[name]) then
             result.Warlock[name] = {}
         end
         result.Warlock[name][#result.Warlock[name] + 1] = buftype
     end
-    DEFAULT_CHAT_FRAME:AddMessage("TransAllocationResultToByName 4")
     return result
 end
 
@@ -87,8 +83,7 @@ function Notifier:NotifyToGrid(allcate_data)
         return result
     end
 
-    --_G.SendChatMessage("BufferWatcher插件全团BUF通报:","RAID",nil,nil)
-    _G.SendChatMessage("BufferWatcher插件全团BUF通报:","GUILD",nil,nil)
+    _G.SendChatMessage("BufferWatcher插件全团BUF通报:","RAID",nil,nil)
 
     local allbuf = {
         PriestBlood = "耐力",
@@ -126,15 +121,14 @@ function Notifier:NotifyToGrid(allcate_data)
             --_G.SendChatMessage(str_to_player,"WHISPER",nil,name)
             --_G.SendChatMessage(str_to_player,"SAY",nil,nil)
 
-            -- 测试先发到公会频道
             str_to_player = str_to_player .. "责任人:" .. name
+            _G.SendChatMessage(str_to_player,"WHISPER",nil,name)
             -- _G.SendChatMessage(str_to_player,"GUILD",nil,nil)
         end
-        --_G.SendChatMessage(str_to_raid,"RAID",nil,nil)
-        _G.SendChatMessage(str_to_raid,"GUILD",nil,nil)
+        _G.SendChatMessage(str_to_raid,"RAID",nil,nil)
+        --_G.SendChatMessage(str_to_raid,"GUILD",nil,nil)
 
     end
-    DEFAULT_CHAT_FRAME:AddMessage("NotifyToGrid end")
 end
 
 -- 通报buf缺少情况
@@ -174,6 +168,8 @@ end
 
 function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
 
+    local SendChannel = "RAID"  -- 团队
+    --local SendChannel = "GUILD" -- 公会
 
     local bufname_to_cn = {
         PriestBlood = "耐力",
@@ -199,7 +195,7 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
     end
 
     if(raidNotify) then
-        _G.SendChatMessage("BufferWatcher插件全团BUF检查:","GUILD",nil,nil)
+        _G.SendChatMessage("BufferWatcher插件全团BUF检查:",SendChannel,nil,nil)
     end
     local noProblem = true
     for i =1,8 do
@@ -230,16 +226,16 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
                         --测试先发到公会频道
                         str = str .. " *责任人* " .. buflack[bufe][i]["BufPlayer"]
                         if(raidNotify) then
-                            _G.SendChatMessage(str,"GUILD",nil,nil)
+                            _G.SendChatMessage(str,SendChannel,nil,nil)
                         end
                         noProblem = false
                     else
-                        str = str .. " *未指定负责人*"
-                        --_G.SendChatMessage(str,"RAID",nil,nil)
-                        if(raidNotify) then
-                            _G.SendChatMessage(str,"GUILD",nil,nil)
-                        end
-                        noProblem = false
+                        --str = str .. " *未指定负责人*"
+                        ----_G.SendChatMessage(str,"RAID",nil,nil)
+                        --if(raidNotify) then
+                        --    _G.SendChatMessage(str,"GUILD",nil,nil)
+                        --end
+                        --noProblem = false
                     end
                 end
                 break
@@ -269,7 +265,7 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
             local raidstr = name .. " 请点掉拯救"
             local whisperstr = "BuffWatcher插件提醒:" .. name .. " 请点掉拯救"
             if(raidNotify) then
-                _G.SendChatMessage(raidstr,"GUILD",nil,nil)
+                _G.SendChatMessage(raidstr,SendChannel,nil,nil)
             end
 
             if(personNotify)then
@@ -281,7 +277,7 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
     end
 
     if(noProblem and raidNotify) then
-        _G.SendChatMessage("Buff全部正常","GUILD",nil,nil)
+        _G.SendChatMessage("Buff全部正常",SendChannel,nil,nil)
     end
 
 

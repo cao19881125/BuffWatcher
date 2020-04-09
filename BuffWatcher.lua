@@ -3,6 +3,7 @@ BuffWatcher = LibStub("AceAddon-3.0"):NewAddon("BuffWatcher","AceConsole-3.0","A
 
 local BuffWatcher = _G.BuffWatcher
 local BWMainWindow = _G.BWMainWindow
+local BWCheckPlayerWindow = _G.BWCheckPlayerWindow
 local RaidInfo = _G.RaidInfo
 local PlayerClassEnum = _G.PlayerClassEnum
 local Notifier = _G.Notifier
@@ -47,6 +48,8 @@ function BuffWatcher:OnInitialize()
 	BWMainWindow.db = acedb:New("BuffWatcherDB",Default_Profile)
 
     BWMainWindow:CreateMainWindow()
+	BWCheckPlayerWindow:CreateWindow()
+
     BWMainWindow:RegistButtonCallBack(BuffWatcher.OnInitButtonCallBack,
 			BuffWatcher.OnNotifyButtonCallBack,
 			BuffWatcher.OnAllocateButtonCallback,
@@ -57,6 +60,7 @@ function BuffWatcher:OnInitialize()
 	BWMainWindow:SetNotifyInfo(BWMainWindow.db.profile.MainWindow.NotifyBox.RaidNotify,BWMainWindow.db.profile.MainWindow.NotifyBox.PersonNotify)
 	BWMainWindow:SetAutoCheckInterval(BWMainWindow.db.profile.MainWindow.AutoCheck.Interval)
     BWMainWindow:Hide()
+	BWCheckPlayerWindow:Hide()
 	BuffWatcher.events:SetScript("OnUpdate",BuffWatcher.OnUpdate)
 end
 
@@ -129,19 +133,31 @@ function BuffWatcher:SetMainwindowDropDown()
 	BWMainWindow:SetAllDropDown(data)
 end
 
+function BuffWatcher:SetCheckPlayerWindow()
+	local partyArray = {}
+
+	for gn,narray in pairs(RaidInfo.ByGroup) do
+		partyArray[gn] = {}
+		for name,_ in pairs(narray.players) do
+			table.insert(partyArray[gn],name)
+		end
+	end
+
+	BWCheckPlayerWindow:SetPartyNames(partyArray)
+end
+
 function BuffWatcher:OnInitButtonCallBack()
-	DEFAULT_CHAT_FRAME:AddMessage("OnInitButtonCallBack")
+	--DEFAULT_CHAT_FRAME:AddMessage("OnInitButtonCallBack")
 	RaidInfo:LoadAllMember()
 	--RaidInfo:GenerateTestData()
+	BuffWatcher:SetCheckPlayerWindow()
 	BuffWatcher:SetMainwindowDropDown()
 end
 
 function BuffWatcher:OnNotifyButtonCallBack()
-	DEFAULT_CHAT_FRAME:AddMessage("Hello2")
+	--DEFAULT_CHAT_FRAME:AddMessage("Hello2")
 
 	local allocate_result = BWMainWindow:GetAllAllocation()
-	--DEFAULT_CHAT_FRAME:AddMessage(allocate_result.Knight["ZhengJiu"])
-	--DEFAULT_CHAT_FRAME:AddMessage("Hello2-1")
 	Notifier:NotifyToGrid(allocate_result)
 
 end
@@ -160,7 +176,8 @@ function BuffWatcher:CheckoutBuf()
 		players[gn] = gp.players
 	end
 	local tanks = BWMainWindow:GetTankAllocation()
-	local buflack = BufMonitor:BufCheck(allocation_data,players,tanks)
+	local exception_players = BWCheckPlayerWindow:GetExceptionPlayers()
+	local buflack = BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
 	--DEFAULT_CHAT_FRAME:AddMessage(buflack["PriestBlood"][1].Lacker[1])
 
 	local raidNotify,personNotify = BWMainWindow:GetNotifyInfo()
@@ -176,7 +193,6 @@ end
 function BuffWatcher:OnAutocheckIntervalEditCallBack()
 	local value = BWMainWindow:GetAutocheckIntervalEditText()
 	local nv = tonumber(value)
-	DEFAULT_CHAT_FRAME:AddMessage(value)
 	if(nv) then
 		BWMainWindow.db.profile.MainWindow.AutoCheck.Interval = nv
 	end
@@ -245,7 +261,6 @@ function BuffWatcher:AutoAllocate()
 end
 
 function BuffWatcher:OnAllocateButtonCallback()
-	DEFAULT_CHAT_FRAME:AddMessage("Hello3")
 	local allocate_result = BuffWatcher:AutoAllocate()
 	for groupnum,name in pairs(allocate_result.PriestBlood) do
 		BWMainWindow:SetOneSureName("PriestBlood",groupnum,name)
@@ -273,7 +288,6 @@ function BuffWatcher:OnAllocateButtonCallback()
 end
 
 function BuffWatcher:OnMonitorButtonCallback()
-	DEFAULT_CHAT_FRAME:AddMessage("Hello4")
 	if(MonitorStat == 0) then
 		MonitorStat = 1
 	elseif(MonitorStat == 1) then
