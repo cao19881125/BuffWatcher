@@ -1,3 +1,4 @@
+# 魔兽世界怀旧服团队buf检查监控插件
 ## 插件主界面
 ![image](https://github.com/cao19881125/picture_cloud/blob/master/BuffWatcher/bufferwatcher-mainwindow2.png?raw=true)
 
