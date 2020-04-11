@@ -203,6 +203,10 @@ function BuffWatcher:AllocateCaculate(data,pn)
 	-- 分配公式为，假设牧师为n个人，则需要8%n个人刷(8/n + 1)个队伍，需要(n - 8%n)个人刷(8/n)个队伍
 	local result = {}
 
+	if(not data) then
+		return result
+	end
+
 	local n = #data
 	if(n <= 0) then
 		return result
@@ -235,7 +239,7 @@ function BuffWatcher:AutoAllocate()
 
 
 	result.PriestBlood = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["PRIEST"],8)
-	result.PriestSpirt = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["PRIEST"],8)
+	result.PriestSpirt = result.PriestBlood
 	result.MageIntelli = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["MAGE"],8)
 	result.DruidClaw = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["DRUID"],8)
 
@@ -266,9 +270,9 @@ function BuffWatcher:OnAllocateButtonCallback()
 		BWMainWindow:SetOneSureName("PriestBlood",groupnum,name)
 	end
 
-	for groupnum,name in pairs(allocate_result.PriestSpirt) do
-		BWMainWindow:SetOneSureName("PriestSpirt",groupnum,name)
-	end
+	--for groupnum,name in pairs(allocate_result.PriestSpirt) do
+	--	BWMainWindow:SetOneSureName("PriestSpirt",groupnum,name)
+	--end
 
 	for groupnum,name in pairs(allocate_result.MageIntelli) do
 		BWMainWindow:SetOneSureName("MageIntelli",groupnum,name)

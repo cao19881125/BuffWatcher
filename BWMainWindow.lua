@@ -62,90 +62,65 @@ function BWMainWindow:CreateMainWindow()
     frame:SetTitle("Buff监控")
     frame:SetStatusText("监控状态:停止")
     frame:SetLayout("List")
-    frame:SetWidth(84*SCALE_LENGTH)
+    frame:SetWidth(68*SCALE_LENGTH)
     frame:SetHeight(65*SCALE_LENGTH)
     --frame.frame:SetResizable(false)
 
 
     local FlowLayout1 = AceGUI:Create("SimpleGroup")
     FlowLayout1:SetLayout("Flow")
-    FlowLayout1:SetWidth(84*SCALE_LENGTH)
+    FlowLayout1:SetWidth(68*SCALE_LENGTH)
     FlowLayout1:SetHeight(40*SCALE_LENGTH)
     frame:AddChild(FlowLayout1)
 
-
-    local Flow1List1 = AceGUI:Create("SimpleGroup")
-    Flow1List1:SetLayout("List")
-    Flow1List1:SetWidth(32*SCALE_LENGTH)
-    Flow1List1:SetHeight(40*SCALE_LENGTH)
-    FlowLayout1:AddChild(Flow1List1)
-
-    -- 牧师耐力
-    local PriestBloodGroup,dropdownarray = BWMainWindow:CreateBufGroup("耐力")
-    Flow1List1:AddChild(PriestBloodGroup)
+    -- 牧师耐力精神
+    local PriestBloodGroup,dropdownarray = BWMainWindow:CreateBufGroup("耐力精神")
+    FlowLayout1:AddChild(PriestBloodGroup)
     BWMainWindow.DropDownBox["PriestBlood"] = dropdownarray
 
-    -- 牧师精神
-    local PriestSpirtGroup,dropdownarray = BWMainWindow:CreateBufGroup("精神")
-    Flow1List1:AddChild(PriestSpirtGroup)
-    BWMainWindow.DropDownBox["PriestSpirt"] = dropdownarray
-
-
-
-    local Flow1List2 = AceGUI:Create("SimpleGroup")
-    Flow1List2:SetLayout("List")
-    Flow1List2:SetWidth(32*SCALE_LENGTH)
-    Flow1List2:SetHeight(40*SCALE_LENGTH)
-    FlowLayout1:AddChild(Flow1List2)
-
-    -- 法师智力
-    local MageIntelliGroup,dropdownarray = BWMainWindow:CreateBufGroup("智力")
-    Flow1List2:AddChild(MageIntelliGroup)
-    BWMainWindow.DropDownBox["MageIntelli"] = dropdownarray
-
+    ---- 牧师精神
+    --local PriestSpirtGroup,dropdownarray = BWMainWindow:CreateBufGroup("精神")
+    --Flow1List1:AddChild(PriestSpirtGroup)
+    --BWMainWindow.DropDownBox["PriestSpirt"] = dropdownarray
     -- 小德爪子
     local DruidClawGroup,dropdownarray = BWMainWindow:CreateBufGroup("爪子")
-    Flow1List2:AddChild(DruidClawGroup)
+    FlowLayout1:AddChild(DruidClawGroup)
     BWMainWindow.DropDownBox["DruidClaw"] = dropdownarray
-
-    -- 骑士buf
-    local KnightGroup,dropdownarray = BWMainWindow:CreateKnightBufGroup()
-    FlowLayout1:AddChild(KnightGroup)
-    BWMainWindow.DropDownBox["Knight"] = dropdownarray
-
 
     local FlowLayout2 = AceGUI:Create("SimpleGroup")
     FlowLayout2:SetLayout("Flow")
-    FlowLayout2:SetWidth(84*SCALE_LENGTH)
-    FlowLayout2:SetHeight(20*SCALE_LENGTH)
+    FlowLayout2:SetWidth(68*SCALE_LENGTH)
+    FlowLayout2:SetHeight(40*SCALE_LENGTH)
     frame:AddChild(FlowLayout2)
 
-    local Flow2List1 = AceGUI:Create("SimpleGroup")
-    Flow2List1:SetLayout("List")
-    Flow2List1:SetWidth(32*SCALE_LENGTH)
-    Flow2List1:SetHeight(20*SCALE_LENGTH)
-    FlowLayout2:AddChild(Flow2List1)
+    -- 法师智力
+    local MageIntelliGroup,dropdownarray = BWMainWindow:CreateBufGroup("智力")
+    FlowLayout2:AddChild(MageIntelliGroup)
+    BWMainWindow.DropDownBox["MageIntelli"] = dropdownarray
+
+
+
+    -- 骑士buf
+    local KnightGroup,dropdownarray = BWMainWindow:CreateKnightBufGroup()
+    FlowLayout2:AddChild(KnightGroup)
+    BWMainWindow.DropDownBox["Knight"] = dropdownarray
+
+
+    local FlowLayout3 = AceGUI:Create("SimpleGroup")
+    FlowLayout3:SetLayout("Flow")
+    FlowLayout3:SetWidth(68*SCALE_LENGTH)
+    FlowLayout3:SetHeight(20*SCALE_LENGTH)
+    frame:AddChild(FlowLayout3)
 
     local WarlockGroup,dropdownarray = BWMainWindow:CreateWarlockGroup()
-    Flow2List1:AddChild(WarlockGroup)
+    FlowLayout3:AddChild(WarlockGroup)
     BWMainWindow.DropDownBox["Warlock"] = dropdownarray
 
-    local Flow2List2 = AceGUI:Create("SimpleGroup")
-    Flow2List2:SetLayout("List")
-    Flow2List2:SetWidth(32*SCALE_LENGTH)
-    Flow2List2:SetHeight(20*SCALE_LENGTH)
-    FlowLayout2:AddChild(Flow2List2)
 
     local TankGroup,dropdownarray = BWMainWindow:CreateTankGroup()
-    Flow2List2:AddChild(TankGroup)
+    FlowLayout3:AddChild(TankGroup)
     BWMainWindow.DropDownBox["Tank"] = dropdownarray
 
-
-    --local FlowLayout3 = AceGUI:Create("SimpleGroup")
-    --FlowLayout3:SetLayout("Flow")
-    --FlowLayout3:SetWidth(84*SCALE_LENGTH)
-    --FlowLayout3:SetHeight(10*SCALE_LENGTH)
-    --frame:AddChild(FlowLayout3)
 
     local ConfigGroup = BWMainWindow:CreateConfigGroup()
     frame:AddChild(ConfigGroup)
@@ -170,7 +145,8 @@ function BWMainWindow:CreateBufGroup(bufname)
     BloodGroup:SetLayout("List")
     BloodGroup:SetTitle(bufname)
     BloodGroup:SetWidth(32*SCALE_LENGTH)
-    BloodGroup:SetHeight(20*SCALE_LENGTH)
+    BloodGroup:SetHeight(17*SCALE_LENGTH)
+    BloodGroup.noAutoHeight = true
 
     local DropdownArray = {}
 
@@ -210,6 +186,7 @@ function BWMainWindow:CreateTwoGroupGroupDown(label1,label2)
     OneGroupDropDown:SetHeight(SCALE_LENGTH)
     OneTwoGroup:AddChild(OneGroupDropDown)
 
+
     local TwoGroupDropDown = AceGUI:Create("Dropdown2")
     TwoGroupDropDown:SetLabel(label2)
     TwoGroupDropDown:SetText("<空>")
@@ -220,65 +197,119 @@ function BWMainWindow:CreateTwoGroupGroupDown(label1,label2)
     return OneTwoGroup,OneGroupDropDown,TwoGroupDropDown
 end
 
+function BWMainWindow:CreateKnightBufGroup2()
+    local BloodGroup = AceGUI:Create("InlineGroup")
+    BloodGroup:SetLayout("List")
+    BloodGroup:SetTitle("骑士")
+    BloodGroup:SetWidth(32*SCALE_LENGTH)
+    BloodGroup:SetHeight(17*SCALE_LENGTH)
+    BloodGroup.noAutoHeight = true
+
+    local DropdownArray = {}
+
+    local dropdownGroup,dropdown1,dropdown2 = BWMainWindow:CreateTwoGroupGroupDown("王者","力量")
+    BloodGroup:AddChild(dropdownGroup)
+    DropdownArray[1] = dropdown1
+    DropdownArray[2] = dropdown2
+
+    dropdownGroup,dropdown1,dropdown2 = BWMainWindow:CreateTwoGroupGroupDown("拯救","智慧")
+    BloodGroup:AddChild(dropdownGroup)
+    DropdownArray[3] = dropdown1
+    DropdownArray[4] = dropdown2
+
+    dropdownGroup,dropdown1,dropdown2 = BWMainWindow:CreateTwoGroupGroupDown("光明","庇护")
+    BloodGroup:AddChild(dropdownGroup)
+    DropdownArray[5] = dropdown1
+    DropdownArray[6] = dropdown2
+
+
+
+
+    return BloodGroup,DropdownArray
+end
+
 function BWMainWindow:CreateKnightBufGroup()
     local KnightGroup = AceGUI:Create("InlineGroup")
     KnightGroup:SetLayout("List")
     KnightGroup:SetTitle("骑士")
-    KnightGroup:SetWidth(15*SCALE_LENGTH)
-    KnightGroup:SetHeight(40*SCALE_LENGTH)
+    KnightGroup:SetWidth(32*SCALE_LENGTH)
+    KnightGroup:SetHeight(17*SCALE_LENGTH)
+    KnightGroup.noAutoHeight = true
 
 
     local DropdownArray = {}
+
+    local OneTwoGroup = AceGUI:Create("SimpleGroup")
+    OneTwoGroup:SetLayout("Flow")
+    OneTwoGroup:SetWidth(32*SCALE_LENGTH)
+    OneTwoGroup:SetHeight(SCALE_LENGTH)
+    KnightGroup:AddChild(OneTwoGroup)
 
     local WangZheDropDown = AceGUI:Create("Dropdown2")
     WangZheDropDown:SetLabel("王者")
     WangZheDropDown:SetText("<空>")
     WangZheDropDown:SetWidth(15*SCALE_LENGTH)
-    WangZheDropDown:SetHeight(5*SCALE_LENGTH)
+    WangZheDropDown:SetHeight(SCALE_LENGTH)
     --WangZheDropDown:SetText("MAGE11")
     --BWMainWindow:ChangeFontSize(WangZheDropDown,10)
-    KnightGroup:AddChild(WangZheDropDown)
+    OneTwoGroup:AddChild(WangZheDropDown)
     DropdownArray["WangZhe"] = WangZheDropDown
 
     local ZhengJiuDropDown = AceGUI:Create("Dropdown2")
     ZhengJiuDropDown:SetLabel("拯救")
     ZhengJiuDropDown:SetText("<空>")
     ZhengJiuDropDown:SetWidth(15*SCALE_LENGTH)
-    ZhengJiuDropDown:SetHeight(5*SCALE_LENGTH)
-    KnightGroup:AddChild(ZhengJiuDropDown)
+    ZhengJiuDropDown:SetHeight(SCALE_LENGTH)
+    OneTwoGroup:AddChild(ZhengJiuDropDown)
     DropdownArray["ZhengJiu"] = ZhengJiuDropDown
+
+
+    local ThreeFourGroup = AceGUI:Create("SimpleGroup")
+    ThreeFourGroup:SetLayout("Flow")
+    ThreeFourGroup:SetWidth(32*SCALE_LENGTH)
+    ThreeFourGroup:SetHeight(SCALE_LENGTH)
+    KnightGroup:AddChild(ThreeFourGroup)
 
     local GuangMingDropDown = AceGUI:Create("Dropdown2")
     GuangMingDropDown:SetLabel("光明")
     GuangMingDropDown:SetText("<空>")
     GuangMingDropDown:SetWidth(15*SCALE_LENGTH)
-    GuangMingDropDown:SetHeight(5*SCALE_LENGTH)
-    KnightGroup:AddChild(GuangMingDropDown)
+    GuangMingDropDown:SetHeight(SCALE_LENGTH)
+    ThreeFourGroup:AddChild(GuangMingDropDown)
     DropdownArray["GuangMing"] = GuangMingDropDown
 
     local LiLiangDropDown = AceGUI:Create("Dropdown2")
     LiLiangDropDown:SetLabel("力量")
     LiLiangDropDown:SetText("<空>")
     LiLiangDropDown:SetWidth(15*SCALE_LENGTH)
-    LiLiangDropDown:SetHeight(5*SCALE_LENGTH)
-    KnightGroup:AddChild(LiLiangDropDown)
+    LiLiangDropDown:SetHeight(SCALE_LENGTH)
+    ThreeFourGroup:AddChild(LiLiangDropDown)
     DropdownArray["LiLiang"] = LiLiangDropDown
+
+
+    local FiveSixGroup = AceGUI:Create("SimpleGroup")
+    FiveSixGroup:SetLayout("Flow")
+    FiveSixGroup:SetWidth(32*SCALE_LENGTH)
+    FiveSixGroup:SetHeight(SCALE_LENGTH)
+    KnightGroup:AddChild(FiveSixGroup)
 
     local ZhiHuiDropDown = AceGUI:Create("Dropdown2")
     ZhiHuiDropDown:SetLabel("智慧")
     ZhiHuiDropDown:SetText("<空>")
     ZhiHuiDropDown:SetWidth(15*SCALE_LENGTH)
-    ZhiHuiDropDown:SetHeight(5*SCALE_LENGTH)
-    KnightGroup:AddChild(ZhiHuiDropDown)
+    ZhiHuiDropDown:SetHeight(SCALE_LENGTH)
+    FiveSixGroup:AddChild(ZhiHuiDropDown)
     DropdownArray["ZhiHui"] = ZhiHuiDropDown
 
     local BiHuDropDown = AceGUI:Create("Dropdown2")
     BiHuDropDown:SetLabel("庇护")
     BiHuDropDown:SetText("<空>")
     BiHuDropDown:SetWidth(15*SCALE_LENGTH)
-    BiHuDropDown:SetHeight(5*SCALE_LENGTH)
-    KnightGroup:AddChild(BiHuDropDown)
+    BiHuDropDown:SetHeight(SCALE_LENGTH)
+    FiveSixGroup:AddChild(BiHuDropDown)
     DropdownArray["BiHu"] = BiHuDropDown
+
+
 
     return KnightGroup,DropdownArray
 end
@@ -395,11 +426,6 @@ function BWMainWindow:CreateButtonGroup()
     ButtonGroup:SetWidth(84*SCALE_LENGTH)
     ButtonGroup:SetHeight(10*SCALE_LENGTH)
 
-    local SpaceLabel = AceGUI:Create("Label")
-    SpaceLabel:SetText("  ")
-    SpaceLabel:SetWidth(19*SCALE_LENGTH)
-    ButtonGroup:AddChild(SpaceLabel)
-
 
     local RestButton = AceGUI:Create("Button")
     RestButton:SetText("初始化")
@@ -487,7 +513,7 @@ function BWMainWindow:SetAllDropDown(data)
     -- 设置牧师，法师，小德列表
     for i =1,8 do
         BWMainWindow.DropDownBox.PriestBlood[i]:SetList(data["PRIEST"])
-        BWMainWindow.DropDownBox.PriestSpirt[i]:SetList(data["PRIEST"])
+        --BWMainWindow.DropDownBox.PriestSpirt[i]:SetList(data["PRIEST"])
         BWMainWindow.DropDownBox.MageIntelli[i]:SetList(data["MAGE"])
         BWMainWindow.DropDownBox.DruidClaw[i]:SetList(data["DRUID"])
     end
@@ -520,13 +546,13 @@ end
 
 -- 设置确切的buf
 -- buftype:buf类型
---      PriestBlood:牧师耐力 PriestSpirt:牧师精神 MageIntelli:法师智力 DruidClaw:小德爪子
+--      PriestBlood:牧师耐力精神 MageIntelli:法师智力 DruidClaw:小德爪子
 --      WangZhe:骑士王者 ZhengJiu:骑士拯救 GuangMing:骑士光明 LiLiang:骑士力量 BiHu:骑士庇护 ZhiHui:骑士智慧
 --      LuMang:术士鲁莽  YuanSu:术士元素 YuYan:术士语言 AnYing:术士暗影
 -- groupnum:小队  骑士和术士不需要设置
 -- name:刷buf的责任人
 function BWMainWindow:SetOneSureName(buftype,groupnum,name)
-    if(buftype == "PriestBlood" or buftype == "PriestSpirt"
+    if(buftype == "PriestBlood"
         or buftype == "MageIntelli" or buftype == "DruidClaw") then
         BWMainWindow.DropDownBox[buftype][groupnum]:SetText(name)
     elseif(buftype == "WangZhe" or buftype == "ZhengJiu" or buftype == "GuangMing"
@@ -559,7 +585,7 @@ function BWMainWindow:GetAllAllocation()
     result["DruidClaw"] = {}
     for i = 1,8 do
         result["PriestBlood"][i] = BWMainWindow.DropDownBox.PriestBlood[i]:GetText()
-        result["PriestSpirt"][i] = BWMainWindow.DropDownBox.PriestSpirt[i]:GetText()
+        result["PriestSpirt"][i] = result["PriestBlood"][i]
         result["MageIntelli"][i] = BWMainWindow.DropDownBox.MageIntelli[i]:GetText()
         result["DruidClaw"][i] = BWMainWindow.DropDownBox.DruidClaw[i]:GetText()
     end

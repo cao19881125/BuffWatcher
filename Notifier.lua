@@ -67,6 +67,10 @@ end
 
 function Notifier:NotifyToGrid(allcate_data)
 
+
+    local SendChannel = "RAID"  -- 团队
+    --local SendChannel = "GUILD" -- 公会
+
     local result_by_name = Notifier:TransAllocationResultToByName(allcate_data)
 
     -- result_by_name的结果是name做key的，按照name排序，这样会出现通报中3队在前1队再后的情况，此函数再纠正一下
@@ -83,11 +87,11 @@ function Notifier:NotifyToGrid(allcate_data)
         return result
     end
 
-    _G.SendChatMessage("BufferWatcher插件全团BUF通报:","RAID",nil,nil)
+    _G.SendChatMessage("BufferWatcher插件全团BUF通报:",SendChannel,nil,nil)
 
     local allbuf = {
-        PriestBlood = "耐力",
-        PriestSpirt = "精神",
+        PriestBlood = "耐力精神",
+        --PriestSpirt = "精神",
         MageIntelli = "智力",
         DruidClaw   = "爪子",
         Knight      = "骑士",
@@ -122,10 +126,10 @@ function Notifier:NotifyToGrid(allcate_data)
             --_G.SendChatMessage(str_to_player,"SAY",nil,nil)
 
             str_to_player = str_to_player .. "责任人:" .. name
-            _G.SendChatMessage(str_to_player,"WHISPER",nil,name)
-            -- _G.SendChatMessage(str_to_player,"GUILD",nil,nil)
+            --_G.SendChatMessage(str_to_player,"WHISPER",nil,name)
+            _G.SendChatMessage(str_to_player,SendChannel,nil,nil)
         end
-        _G.SendChatMessage(str_to_raid,"RAID",nil,nil)
+        _G.SendChatMessage(str_to_raid,SendChannel,nil,nil)
         --_G.SendChatMessage(str_to_raid,"GUILD",nil,nil)
 
     end
