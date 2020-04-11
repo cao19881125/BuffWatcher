@@ -227,6 +227,7 @@ function BWMainWindow:CreateKnightBufGroup()
     KnightGroup:SetWidth(15*SCALE_LENGTH)
     KnightGroup:SetHeight(40*SCALE_LENGTH)
 
+
     local DropdownArray = {}
 
     local WangZheDropDown = AceGUI:Create("Dropdown2")

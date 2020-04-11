@@ -139,25 +139,29 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     checkgroupbuf("DruidClaw",9885,21850,nil)
 
     -- 检查王者
-    checkgroupbuf("WangZhe",20217,25898,nil)
+    exception_classs = {PlayerClassEnum["SHAMAN"]}
+    checkgroupbuf("WangZhe",20217,25898,exception_classs)
 
     -- 检查力量
     exception_classs = {PlayerClassEnum["MAGE"],PlayerClassEnum["PRIEST"],
                         PlayerClassEnum["WARLOCK"],PlayerClassEnum["HUNTER"],
-                        PlayerClassEnum["PALADIN"]}
+                        PlayerClassEnum["PALADIN"],PlayerClassEnum["SHAMAN"]}
     checkgroupbuf("LiLiang",19838,25782,exception_classs)
 
     -- 检查拯救
-    checkgroupbuf("ZhengJiu",1038,25895,nil)
+    exception_classs = {PlayerClassEnum["SHAMAN"]}
+    checkgroupbuf("ZhengJiu",1038,25895,exception_classs)
 
     -- 检查庇护
-    checkgroupbuf("BiHu",20914,25899,nil)
+    exception_classs = {PlayerClassEnum["SHAMAN"]}
+    checkgroupbuf("BiHu",20914,25899,exception_classs)
 
     -- 检查光明
-    checkgroupbuf("GuangMing",19979,25890,nil)
+    exception_classs = {PlayerClassEnum["SHAMAN"]}
+    checkgroupbuf("GuangMing",19979,25890,exception_classs)
 
     -- 检查智慧
-    exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"]}
+    exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"],PlayerClassEnum["SHAMAN"]}
     checkgroupbuf("ZhiHui",19854,25894,exception_classs)
 
     return result

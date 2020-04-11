@@ -15,5 +15,5 @@
 	<Include file="Libs\LibDropDown-1.0\LibDropDown-1.0\lib.xml"/>
 	<Include file="Libs\LibBossIDs-1.0\lib.xml"/>
 	<Include file="Libs\LibSharedMedia-3.0\lib.xml"/>
-	<Script file="Libs\LibGraph-2.0\LibGraph-2.0.lua"/>
+	<!--<Script file="Libs\LibGraph-2.0\LibGraph-2.0.lua"/>-->
 </Ui>

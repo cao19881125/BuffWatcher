@@ -8,7 +8,7 @@ PlayerClassEnum = {
     PRIEST=4,        --牧师
     WARLOCK=5,      --术士
     HUNTER=6,        --猎人
-    --SHAMAN=7,        --萨满
+    SHAMAN=7,        --萨满
     DRUID=8,          --德鲁伊
     PALADIN=9       --圣骑士
 }
@@ -80,7 +80,7 @@ function RaidInfo:LoadAllMember()
             RaidInfo.ByClass[class][#RaidInfo.ByClass[class] + 1] = p
         end
     end
-
+    
 end
 
 
@@ -108,7 +108,8 @@ function RaidInfo:GenerateTestData()
         }
     end
 
-    local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","PALADIN"  }
+    --local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","PALADIN"  } -- 联盟
+    local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","SHAMAN"  } -- 部落
 
     for i = 1,40 do
 
@@ -125,12 +126,13 @@ function RaidInfo:GenerateTestData()
 
 
 
-    RaidInfo.ByClass["WARRIOR"][1].bufs[21564] = nil
+    --RaidInfo.ByClass["WARRIOR"][1].bufs[21564] = nil
     --RaidInfo.ByClass["ROGUE"][1].bufs[21564] = nil
     --RaidInfo.ByClass["HUNTER"][2].bufs[21564] = nil
     --RaidInfo.ByClass["HUNTER"][2].bufs[25898] = nil
     --RaidInfo.ByClass["WARLOCK"][3].bufs[25898] = nil
     --RaidInfo.ByClass["MAGE"][1].bufs[25782] = nil
+    RaidInfo.ByClass["SHAMAN"][1].bufs[21564] = nil
 
 end
 
