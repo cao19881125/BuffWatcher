@@ -1,3 +1,4 @@
+# 魔兽世界怀旧服团队buf检查监控插件
 ## 插件主界面
 ![image](https://github.com/cao19881125/picture_cloud/blob/master/BuffWatcher/bufferwatcher-mainwindow2.png?raw=true)
 
@@ -34,10 +35,12 @@
 ### 2.2 插件界面介绍
 #### 2.2.1 小地图按钮
 启动游戏后，会看到小地图下面有一个这个图标，这个图标是打开插件主界面的按钮
+
 ![image](https://github.com/cao19881125/picture_cloud/blob/master/BuffWatcher/buffwatcher-minimapbtn.png?raw=true)
 
 #### 2.2.2 主界面
 点击小地图图标后打开主界面，主界面如下
+
 ![image](https://github.com/cao19881125/picture_cloud/blob/master/BuffWatcher/buffwatcher-mainwindow.png?raw=true)
 
 主界面分为几个区域
