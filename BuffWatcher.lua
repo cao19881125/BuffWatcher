@@ -158,7 +158,8 @@ function BuffWatcher:OnNotifyButtonCallBack()
 	--DEFAULT_CHAT_FRAME:AddMessage("Hello2")
 
 	local allocate_result = BWMainWindow:GetAllAllocation()
-	Notifier:NotifyToGrid(allocate_result)
+	local raidNotify,personNotify = BWMainWindow:GetNotifyInfo()
+	Notifier:NotifyToGrid(allocate_result,raidNotify,personNotify)
 
 end
 

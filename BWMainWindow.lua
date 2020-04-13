@@ -366,7 +366,7 @@ function BWMainWindow:CreateConfigGroup()
 
     local ConfigGroup = AceGUI:Create("InlineGroup")
     ConfigGroup:SetLayout("Flow")
-    ConfigGroup:SetTitle("检查通报")
+    ConfigGroup:SetTitle("通报")
     ConfigGroup:SetWidth(20*SCALE_LENGTH)
     ConfigGroup:SetHeight(4*SCALE_LENGTH)
     FlowLayout3:AddChild(ConfigGroup)

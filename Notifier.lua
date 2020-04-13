@@ -65,7 +65,7 @@ function Notifier:TransAllocationResultToByName(allcate_data)
     return result
 end
 
-function Notifier:NotifyToGrid(allcate_data)
+function Notifier:NotifyToGrid(allcate_data,raidNotify,personNotify)
 
 
     local SendChannel = "RAID"  -- 团队
@@ -87,7 +87,10 @@ function Notifier:NotifyToGrid(allcate_data)
         return result
     end
 
-    _G.SendChatMessage("BufferWatcher插件全团BUF通报:",SendChannel,nil,nil)
+    if(raidNotify) then
+        _G.SendChatMessage("BufferWatcher插件全团BUF通报:",SendChannel,nil,nil)
+    end
+
 
     local allbuf = {
         PriestBlood = "耐力精神",
@@ -126,10 +129,14 @@ function Notifier:NotifyToGrid(allcate_data)
             --_G.SendChatMessage(str_to_player,"SAY",nil,nil)
 
             str_to_player = str_to_player .. "责任人:" .. name
-            --_G.SendChatMessage(str_to_player,"WHISPER",nil,name)
-            _G.SendChatMessage(str_to_player,SendChannel,nil,nil)
+            if(personNotify) then
+                _G.SendChatMessage(str_to_player,"WHISPER",nil,name)
+            end
         end
-        _G.SendChatMessage(str_to_raid,SendChannel,nil,nil)
+
+        if(raidNotify) then
+            _G.SendChatMessage(str_to_raid,SendChannel,nil,nil)
+        end
         --_G.SendChatMessage(str_to_raid,"GUILD",nil,nil)
 
     end
