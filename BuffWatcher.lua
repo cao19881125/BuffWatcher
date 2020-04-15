@@ -16,6 +16,33 @@ local last_update_time = GetTime()
 
 BuffWatcher.events = CreateFrame("Frame")
 
+BuffWatcher.consoleOptions = {
+	name = "BuffWatcher",
+	type = 'group',
+	args = {
+		["show"] = {
+			order = 12,
+			name = "Show",
+			desc = "Shows the main window",
+			type = 'execute',
+			func = function()
+				BWMainWindow:Show()
+			end,
+			dialogHidden = true
+		},
+		["hide"] = {
+			order = 12,
+			name = "Hide",
+			desc = "Hide the main window",
+			type = 'execute',
+			func = function()
+				BWMainWindow:Hide()
+			end,
+			dialogHidden = true
+		}
+	}
+}
+
 local Default_Profile = {
     profile = {
         MainWindow = {
@@ -47,6 +74,7 @@ end)
 function BuffWatcher:OnInitialize()
 	local acedb = LibStub("AceDB-3.0")
 	BWMainWindow.db = acedb:New("BuffWatcherDB",Default_Profile)
+	LibStub("AceConfig-3.0"):RegisterOptionsTable("BuffWatcher", BuffWatcher.consoleOptions,{"BuffWatcher","BW"})
 
     BWMainWindow:CreateMainWindow()
 	BWCheckPlayerWindow:CreateWindow()
