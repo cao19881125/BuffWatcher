@@ -43,6 +43,7 @@ BuffWatcher.events:SetScript("OnEvent", function(self, event, ...)
 	BuffWatcher[event](BuffWatcher, ...)
 end)
 
+
 function BuffWatcher:OnInitialize()
 	local acedb = LibStub("AceDB-3.0")
 	BWMainWindow.db = acedb:New("BuffWatcherDB",Default_Profile)

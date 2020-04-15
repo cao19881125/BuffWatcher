@@ -58,13 +58,14 @@ function BWMainWindow:ChangeFontSize(fontString,size)
 end
 
 function BWMainWindow:CreateMainWindow()
-    local frame = AceGUI:Create("Frame")
+    local frame = AceGUI:Create("NameFrame")
     frame:SetTitle("Buff监控")
     frame:SetStatusText("监控状态:停止")
     frame:SetLayout("List")
     frame:SetWidth(68*SCALE_LENGTH)
     frame:SetHeight(65*SCALE_LENGTH)
     frame.frame:SetResizable(false)
+    tinsert(UISpecialFrames, frame.frame:GetName());
 
 
     local FlowLayout1 = AceGUI:Create("SimpleGroup")

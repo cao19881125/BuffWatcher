@@ -5,6 +5,7 @@
 	<Script file="widgets\AceGUIContainer-BlizOptionsGroup.lua"/>
 	<Script file="widgets\AceGUIContainer-DropDownGroup.lua"/>
 	<Script file="widgets\AceGUIContainer-Frame.lua"/>
+	<Script file="widgets\AceGUIContainer-NameFrame.lua"/>
 	<Script file="widgets\AceGUIContainer-Frame2.lua"/>
 	<Script file="widgets\AceGUIContainer-Frame3.lua"/>
 	<Script file="widgets\AceGUIContainer-InlineGroup.lua"/>
