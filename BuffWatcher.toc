@@ -2,7 +2,7 @@
 ## Title: BuffWatcher
 ## Notes: Grid buff watcher
 ## Author: YuntaoCao
-## Version: 1.2
+## Version: 1.2.2
 ## X-Website: https://github.com/cao19881125/BuffWatcher
 ## SavedVariables: BuffWatcherDB
 
