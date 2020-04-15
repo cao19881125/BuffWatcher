@@ -88,7 +88,7 @@ function Notifier:NotifyToGrid(allcate_data,raidNotify,personNotify)
     end
 
     if(raidNotify) then
-        _G.SendChatMessage("BufferWatcher插件全团BUF通报:",SendChannel,nil,nil)
+        _G.SendChatMessage("=>>全团BUF分配<<=:",SendChannel,nil,nil)
     end
 
 
@@ -134,11 +134,15 @@ function Notifier:NotifyToGrid(allcate_data,raidNotify,personNotify)
             end
         end
 
-        if(raidNotify) then
+        if(raidNotify and #sorted_array > 0) then
             _G.SendChatMessage(str_to_raid,SendChannel,nil,nil)
         end
         --_G.SendChatMessage(str_to_raid,"GUILD",nil,nil)
 
+    end
+
+    if(raidNotify) then
+        _G.SendChatMessage("=>>BuffWatcher<<=:",SendChannel,nil,nil)
     end
 end
 
@@ -206,7 +210,7 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
     end
 
     if(raidNotify) then
-        _G.SendChatMessage("BufferWatcher插件全团BUF检查:",SendChannel,nil,nil)
+        _G.SendChatMessage("BuffWatcher插件全团BUF检查:",SendChannel,nil,nil)
     end
     local noProblem = true
     for i =1,8 do
