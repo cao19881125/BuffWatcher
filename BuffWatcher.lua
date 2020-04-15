@@ -148,6 +148,10 @@ function BuffWatcher:SetCheckPlayerWindow()
 end
 
 function BuffWatcher:OnInitButtonCallBack()
+	if(not IsInRaid()) then
+		return
+	end
+
 	--DEFAULT_CHAT_FRAME:AddMessage("OnInitButtonCallBack")
 	RaidInfo:LoadAllMember()
 	--RaidInfo:GenerateTestData()
@@ -169,6 +173,10 @@ function BuffWatcher:OnCheckButtonCallback()
 end
 
 function BuffWatcher:CheckoutBuf()
+
+	if(not IsInRaid()) then
+		return
+	end
 
 	RaidInfo:LoadAllMember()
 	--RaidInfo:GenerateTestData()
