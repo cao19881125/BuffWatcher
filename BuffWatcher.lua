@@ -76,7 +76,8 @@ function BuffWatcher:OnInitialize()
 	BWMainWindow.db = acedb:New("BuffWatcherDB",Default_Profile)
 	LibStub("AceConfig-3.0"):RegisterOptionsTable("BuffWatcher", BuffWatcher.consoleOptions,{"BuffWatcher","BW"})
 
-    BWMainWindow:CreateMainWindow()
+	local factionGroup = UnitFactionGroup("player")
+    BWMainWindow:CreateMainWindow(factionGroup)
 	BWCheckPlayerWindow:CreateWindow()
 
     BWMainWindow:RegistButtonCallBack(BuffWatcher.OnInitButtonCallBack,

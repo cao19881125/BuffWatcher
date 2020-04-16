@@ -57,36 +57,65 @@ function BWMainWindow:ChangeFontSize(fontString,size)
     fontString:SetFont(Font, size, Flags)
 end
 
-function BWMainWindow:CreateMainWindow()
+-- Factio :
+--  Alliance : 联盟
+--  Horde   : 部落
+function BWMainWindow:CreateMainWindow(Faction)
     local frame = AceGUI:Create("NameFrame")
     frame:SetTitle("Buff监控")
     frame:SetStatusText("监控状态:停止")
     frame:SetLayout("List")
     frame:SetWidth(68*SCALE_LENGTH)
-    frame:SetHeight(65*SCALE_LENGTH)
+
+    if(Faction == "Alliance") then
+        frame:SetHeight(65*SCALE_LENGTH)
+    elseif(Faction == "Horde")   then
+        frame:SetHeight(55*SCALE_LENGTH)
+    end
+
+
     frame.frame:SetResizable(false)
     tinsert(UISpecialFrames, frame.frame:GetName());
 
+    -- 牧师耐力精神
+    local PriestBloodGroup,dropdownarray = BWMainWindow:CreateBufGroup("耐力精神")
+    BWMainWindow.DropDownBox["PriestBlood"] = dropdownarray
 
+
+    -- 小德爪子
+    local DruidClawGroup,dropdownarray = BWMainWindow:CreateBufGroup("爪子")
+    BWMainWindow.DropDownBox["DruidClaw"] = dropdownarray
+
+    -- 法师智力
+    local MageIntelliGroup,dropdownarray = BWMainWindow:CreateBufGroup("智力")
+    BWMainWindow.DropDownBox["MageIntelli"] = dropdownarray
+
+    -- 骑士buf
+    local KnightGroup,dropdownarray = BWMainWindow:CreateKnightBufGroup()
+    BWMainWindow.DropDownBox["Knight"] = dropdownarray
+
+
+    -- 术士buf
+    local WarlockGroup,dropdownarray = BWMainWindow:CreateWarlockGroup()
+    BWMainWindow.DropDownBox["Warlock"] = dropdownarray
+
+
+    --坦克列表
+    local TankGroup,dropdownarray = BWMainWindow:CreateTankGroup()
+    BWMainWindow.DropDownBox["Tank"] = dropdownarray
+
+
+    -- layout
     local FlowLayout1 = AceGUI:Create("SimpleGroup")
     FlowLayout1:SetLayout("Flow")
     FlowLayout1:SetWidth(68*SCALE_LENGTH)
     FlowLayout1:SetHeight(40*SCALE_LENGTH)
     frame:AddChild(FlowLayout1)
 
-    -- 牧师耐力精神
-    local PriestBloodGroup,dropdownarray = BWMainWindow:CreateBufGroup("耐力精神")
-    FlowLayout1:AddChild(PriestBloodGroup)
-    BWMainWindow.DropDownBox["PriestBlood"] = dropdownarray
 
-    ---- 牧师精神
-    --local PriestSpirtGroup,dropdownarray = BWMainWindow:CreateBufGroup("精神")
-    --Flow1List1:AddChild(PriestSpirtGroup)
-    --BWMainWindow.DropDownBox["PriestSpirt"] = dropdownarray
-    -- 小德爪子
-    local DruidClawGroup,dropdownarray = BWMainWindow:CreateBufGroup("爪子")
+    FlowLayout1:AddChild(PriestBloodGroup)
     FlowLayout1:AddChild(DruidClawGroup)
-    BWMainWindow.DropDownBox["DruidClaw"] = dropdownarray
+
 
     local FlowLayout2 = AceGUI:Create("SimpleGroup")
     FlowLayout2:SetLayout("Flow")
@@ -94,17 +123,15 @@ function BWMainWindow:CreateMainWindow()
     FlowLayout2:SetHeight(40*SCALE_LENGTH)
     frame:AddChild(FlowLayout2)
 
-    -- 法师智力
-    local MageIntelliGroup,dropdownarray = BWMainWindow:CreateBufGroup("智力")
+
     FlowLayout2:AddChild(MageIntelliGroup)
-    BWMainWindow.DropDownBox["MageIntelli"] = dropdownarray
-
-
-
-    -- 骑士buf
-    local KnightGroup,dropdownarray = BWMainWindow:CreateKnightBufGroup()
-    FlowLayout2:AddChild(KnightGroup)
-    BWMainWindow.DropDownBox["Knight"] = dropdownarray
+    if(Faction == "Alliance") then
+        FlowLayout2:AddChild(KnightGroup)
+    elseif(Faction == "Horde")   then
+        WarlockGroup:SetHeight(17*SCALE_LENGTH)
+        WarlockGroup.noAutoHeight = true
+        FlowLayout2:AddChild(WarlockGroup)
+    end
 
 
     local FlowLayout3 = AceGUI:Create("SimpleGroup")
@@ -113,14 +140,11 @@ function BWMainWindow:CreateMainWindow()
     FlowLayout3:SetHeight(20*SCALE_LENGTH)
     frame:AddChild(FlowLayout3)
 
-    local WarlockGroup,dropdownarray = BWMainWindow:CreateWarlockGroup()
-    FlowLayout3:AddChild(WarlockGroup)
-    BWMainWindow.DropDownBox["Warlock"] = dropdownarray
-
-
-    local TankGroup,dropdownarray = BWMainWindow:CreateTankGroup()
-    FlowLayout3:AddChild(TankGroup)
-    BWMainWindow.DropDownBox["Tank"] = dropdownarray
+    if(Faction == "Alliance") then
+        FlowLayout3:AddChild(WarlockGroup)
+        FlowLayout3:AddChild(TankGroup)
+    elseif(Faction == "Horde")   then
+    end
 
 
     local ConfigGroup = BWMainWindow:CreateConfigGroup()
@@ -320,7 +344,7 @@ function BWMainWindow:CreateWarlockGroup()
     WarlockGroup:SetLayout("List")
     WarlockGroup:SetTitle("术士")
     WarlockGroup:SetWidth(32*SCALE_LENGTH)
-    WarlockGroup:SetHeight(20*SCALE_LENGTH)
+    WarlockGroup:SetHeight(17*SCALE_LENGTH)
 
     local DropdownArray = {}
     local OneTwoGroup,dropdown1,dropdown2 = BWMainWindow:CreateTwoGroupGroupDown("鲁莽","元素")

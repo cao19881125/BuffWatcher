@@ -108,8 +108,8 @@ function RaidInfo:GenerateTestData()
         }
     end
 
-    local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","PALADIN"  } -- 联盟
-    --local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","SHAMAN"  } -- 部落
+    --local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","PALADIN"  } -- 联盟
+    local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","SHAMAN"  } -- 部落
 
     for i = 1,40 do
 
@@ -131,7 +131,7 @@ function RaidInfo:GenerateTestData()
     --RaidInfo.ByClass["HUNTER"][2].bufs[21564] = nil
     --RaidInfo.ByClass["HUNTER"][2].bufs[25898] = nil
     --RaidInfo.ByClass["WARLOCK"][3].bufs[25898] = nil
-    RaidInfo.ByClass["MAGE"][1].bufs[27681] = nil
+    --RaidInfo.ByClass["MAGE"][1].bufs[27681] = nil
     --RaidInfo.ByClass["SHAMAN"][1].bufs[21564] = nil
 
 end
