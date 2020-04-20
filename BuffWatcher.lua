@@ -286,10 +286,10 @@ function BuffWatcher:AutoAllocate()
 	if (#knight_result > 0) then
 		result.Knight["LiLiang"] = knight_result[1]
 		result.Knight["ZhiHui"] = knight_result[2]
-		result.Knight["ZhengJiu"] = knight_result[3]
-		result.Knight["GuangMing"] = knight_result[4]
-		result.Knight["WangZhe"] = knight_result[5]
-		result.Knight["BiHu"] = knight_result[6]
+		result.Knight["WangZhe"] = knight_result[3]
+		result.Knight["BiHu"] = knight_result[4]
+		result.Knight["ZhengJiu"] = knight_result[5]
+		result.Knight["GuangMing"] = knight_result[6]
 
 	end
 

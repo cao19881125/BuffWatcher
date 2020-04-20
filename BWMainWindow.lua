@@ -292,28 +292,6 @@ function BWMainWindow:CreateKnightBufGroup()
     ThreeFourGroup:SetHeight(SCALE_LENGTH)
     KnightGroup:AddChild(ThreeFourGroup)
 
-    local ZhengJiuDropDown = AceGUI:Create("Dropdown2")
-    ZhengJiuDropDown:SetLabel("拯救")
-    ZhengJiuDropDown:SetText("<空>")
-    ZhengJiuDropDown:SetWidth(15*SCALE_LENGTH)
-    ZhengJiuDropDown:SetHeight(SCALE_LENGTH)
-    ThreeFourGroup:AddChild(ZhengJiuDropDown)
-    DropdownArray["ZhengJiu"] = ZhengJiuDropDown
-
-    local GuangMingDropDown = AceGUI:Create("Dropdown2")
-    GuangMingDropDown:SetLabel("光明")
-    GuangMingDropDown:SetText("<空>")
-    GuangMingDropDown:SetWidth(15*SCALE_LENGTH)
-    GuangMingDropDown:SetHeight(SCALE_LENGTH)
-    ThreeFourGroup:AddChild(GuangMingDropDown)
-    DropdownArray["GuangMing"] = GuangMingDropDown
-
-
-    local FiveSixGroup = AceGUI:Create("SimpleGroup")
-    FiveSixGroup:SetLayout("Flow")
-    FiveSixGroup:SetWidth(32*SCALE_LENGTH)
-    FiveSixGroup:SetHeight(SCALE_LENGTH)
-    KnightGroup:AddChild(FiveSixGroup)
 
     local WangZheDropDown = AceGUI:Create("Dropdown2")
     WangZheDropDown:SetLabel("王者")
@@ -322,7 +300,7 @@ function BWMainWindow:CreateKnightBufGroup()
     WangZheDropDown:SetHeight(SCALE_LENGTH)
     --WangZheDropDown:SetText("MAGE11")
     --BWMainWindow:ChangeFontSize(WangZheDropDown,10)
-    FiveSixGroup:AddChild(WangZheDropDown)
+    ThreeFourGroup:AddChild(WangZheDropDown)
     DropdownArray["WangZhe"] = WangZheDropDown
 
     local BiHuDropDown = AceGUI:Create("Dropdown2")
@@ -330,10 +308,31 @@ function BWMainWindow:CreateKnightBufGroup()
     BiHuDropDown:SetText("<空>")
     BiHuDropDown:SetWidth(15*SCALE_LENGTH)
     BiHuDropDown:SetHeight(SCALE_LENGTH)
-    FiveSixGroup:AddChild(BiHuDropDown)
+    ThreeFourGroup:AddChild(BiHuDropDown)
     DropdownArray["BiHu"] = BiHuDropDown
 
+    local FiveSixGroup = AceGUI:Create("SimpleGroup")
+    FiveSixGroup:SetLayout("Flow")
+    FiveSixGroup:SetWidth(32*SCALE_LENGTH)
+    FiveSixGroup:SetHeight(SCALE_LENGTH)
+    KnightGroup:AddChild(FiveSixGroup)
 
+
+    local ZhengJiuDropDown = AceGUI:Create("Dropdown2")
+    ZhengJiuDropDown:SetLabel("拯救")
+    ZhengJiuDropDown:SetText("<空>")
+    ZhengJiuDropDown:SetWidth(15*SCALE_LENGTH)
+    ZhengJiuDropDown:SetHeight(SCALE_LENGTH)
+    FiveSixGroup:AddChild(ZhengJiuDropDown)
+    DropdownArray["ZhengJiu"] = ZhengJiuDropDown
+
+    local GuangMingDropDown = AceGUI:Create("Dropdown2")
+    GuangMingDropDown:SetLabel("光明")
+    GuangMingDropDown:SetText("<空>")
+    GuangMingDropDown:SetWidth(15*SCALE_LENGTH)
+    GuangMingDropDown:SetHeight(SCALE_LENGTH)
+    FiveSixGroup:AddChild(GuangMingDropDown)
+    DropdownArray["GuangMing"] = GuangMingDropDown
 
     return KnightGroup,DropdownArray
 end
@@ -568,6 +567,16 @@ function BWMainWindow:SetAllDropDown(data)
 
 end
 
+
+function BWMainWindow:SetDropDownInList(dropdown,setText)
+    for value,text in pairs(dropdown.list) do
+        if(text == setText) then
+            dropdown:SetValue(value)
+            return
+        end
+    end
+end
+
 -- 设置确切的buf
 -- buftype:buf类型
 --      PriestBlood:牧师耐力精神 MageIntelli:法师智力 DruidClaw:小德爪子
@@ -578,12 +587,15 @@ end
 function BWMainWindow:SetOneSureName(buftype,groupnum,name)
     if(buftype == "PriestBlood"
         or buftype == "MageIntelli" or buftype == "DruidClaw") then
-        BWMainWindow.DropDownBox[buftype][groupnum]:SetText(name)
+        -- BWMainWindow.DropDownBox[buftype][groupnum]:SetText(name)
+        BWMainWindow:SetDropDownInList(BWMainWindow.DropDownBox[buftype][groupnum],name)
     elseif(buftype == "WangZhe" or buftype == "ZhengJiu" or buftype == "GuangMing"
             or buftype == "LiLiang" or buftype == "BiHu" or buftype == "ZhiHui") then
-        BWMainWindow.DropDownBox.Knight[buftype]:SetText(name)
+        -- BWMainWindow.DropDownBox.Knight[buftype]:SetText(name)
+        BWMainWindow:SetDropDownInList(BWMainWindow.DropDownBox.Knight[buftype],name)
     elseif(buftype == "LuMang" or buftype == "YuanSu" or buftype == "YuYan" or buftype == "AnYing")  then
-        BWMainWindow.DropDownBox.Warlock[buftype]:SetText(name)
+        -- BWMainWindow.DropDownBox.Warlock[buftype]:SetText(name)
+        BWMainWindow:SetDropDownInList(BWMainWindow.DropDownBox.Warlock[buftype],name)
     end
 
 end

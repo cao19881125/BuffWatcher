@@ -108,13 +108,16 @@ function RaidInfo:GenerateTestData()
         }
     end
 
-    --local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","PALADIN"  } -- 联盟
-    local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","SHAMAN"  } -- 部落
+    local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","PALADIN"  } -- 联盟
+    --local play_class = {  "WARRIOR","ROGUE","MAGE","PRIEST","WARLOCK", "HUNTER","DRUID","SHAMAN"  } -- 部落
 
     for i = 1,40 do
 
         local pc = play_class[math.fmod((i - 1),8) + 1]
 
+        if(pc == "PALADIN" and i > 32) then
+            pc = "MAGE"
+        end
 
         local groupid = math.modf((i - 1)/5) + 1
 
