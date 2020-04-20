@@ -270,30 +270,35 @@ function BWMainWindow:CreateKnightBufGroup()
     OneTwoGroup:SetHeight(SCALE_LENGTH)
     KnightGroup:AddChild(OneTwoGroup)
 
-    local WangZheDropDown = AceGUI:Create("Dropdown2")
-    WangZheDropDown:SetLabel("王者")
-    WangZheDropDown:SetText("<空>")
-    WangZheDropDown:SetWidth(15*SCALE_LENGTH)
-    WangZheDropDown:SetHeight(SCALE_LENGTH)
-    --WangZheDropDown:SetText("MAGE11")
-    --BWMainWindow:ChangeFontSize(WangZheDropDown,10)
-    OneTwoGroup:AddChild(WangZheDropDown)
-    DropdownArray["WangZhe"] = WangZheDropDown
+    local LiLiangDropDown = AceGUI:Create("Dropdown2")
+    LiLiangDropDown:SetLabel("力量")
+    LiLiangDropDown:SetText("<空>")
+    LiLiangDropDown:SetWidth(15*SCALE_LENGTH)
+    LiLiangDropDown:SetHeight(SCALE_LENGTH)
+    OneTwoGroup:AddChild(LiLiangDropDown)
+    DropdownArray["LiLiang"] = LiLiangDropDown
 
-    local ZhengJiuDropDown = AceGUI:Create("Dropdown2")
-    ZhengJiuDropDown:SetLabel("拯救")
-    ZhengJiuDropDown:SetText("<空>")
-    ZhengJiuDropDown:SetWidth(15*SCALE_LENGTH)
-    ZhengJiuDropDown:SetHeight(SCALE_LENGTH)
-    OneTwoGroup:AddChild(ZhengJiuDropDown)
-    DropdownArray["ZhengJiu"] = ZhengJiuDropDown
-
+    local ZhiHuiDropDown = AceGUI:Create("Dropdown2")
+    ZhiHuiDropDown:SetLabel("智慧")
+    ZhiHuiDropDown:SetText("<空>")
+    ZhiHuiDropDown:SetWidth(15*SCALE_LENGTH)
+    ZhiHuiDropDown:SetHeight(SCALE_LENGTH)
+    OneTwoGroup:AddChild(ZhiHuiDropDown)
+    DropdownArray["ZhiHui"] = ZhiHuiDropDown
 
     local ThreeFourGroup = AceGUI:Create("SimpleGroup")
     ThreeFourGroup:SetLayout("Flow")
     ThreeFourGroup:SetWidth(32*SCALE_LENGTH)
     ThreeFourGroup:SetHeight(SCALE_LENGTH)
     KnightGroup:AddChild(ThreeFourGroup)
+
+    local ZhengJiuDropDown = AceGUI:Create("Dropdown2")
+    ZhengJiuDropDown:SetLabel("拯救")
+    ZhengJiuDropDown:SetText("<空>")
+    ZhengJiuDropDown:SetWidth(15*SCALE_LENGTH)
+    ZhengJiuDropDown:SetHeight(SCALE_LENGTH)
+    ThreeFourGroup:AddChild(ZhengJiuDropDown)
+    DropdownArray["ZhengJiu"] = ZhengJiuDropDown
 
     local GuangMingDropDown = AceGUI:Create("Dropdown2")
     GuangMingDropDown:SetLabel("光明")
@@ -303,14 +308,6 @@ function BWMainWindow:CreateKnightBufGroup()
     ThreeFourGroup:AddChild(GuangMingDropDown)
     DropdownArray["GuangMing"] = GuangMingDropDown
 
-    local LiLiangDropDown = AceGUI:Create("Dropdown2")
-    LiLiangDropDown:SetLabel("力量")
-    LiLiangDropDown:SetText("<空>")
-    LiLiangDropDown:SetWidth(15*SCALE_LENGTH)
-    LiLiangDropDown:SetHeight(SCALE_LENGTH)
-    ThreeFourGroup:AddChild(LiLiangDropDown)
-    DropdownArray["LiLiang"] = LiLiangDropDown
-
 
     local FiveSixGroup = AceGUI:Create("SimpleGroup")
     FiveSixGroup:SetLayout("Flow")
@@ -318,13 +315,15 @@ function BWMainWindow:CreateKnightBufGroup()
     FiveSixGroup:SetHeight(SCALE_LENGTH)
     KnightGroup:AddChild(FiveSixGroup)
 
-    local ZhiHuiDropDown = AceGUI:Create("Dropdown2")
-    ZhiHuiDropDown:SetLabel("智慧")
-    ZhiHuiDropDown:SetText("<空>")
-    ZhiHuiDropDown:SetWidth(15*SCALE_LENGTH)
-    ZhiHuiDropDown:SetHeight(SCALE_LENGTH)
-    FiveSixGroup:AddChild(ZhiHuiDropDown)
-    DropdownArray["ZhiHui"] = ZhiHuiDropDown
+    local WangZheDropDown = AceGUI:Create("Dropdown2")
+    WangZheDropDown:SetLabel("王者")
+    WangZheDropDown:SetText("<空>")
+    WangZheDropDown:SetWidth(15*SCALE_LENGTH)
+    WangZheDropDown:SetHeight(SCALE_LENGTH)
+    --WangZheDropDown:SetText("MAGE11")
+    --BWMainWindow:ChangeFontSize(WangZheDropDown,10)
+    FiveSixGroup:AddChild(WangZheDropDown)
+    DropdownArray["WangZhe"] = WangZheDropDown
 
     local BiHuDropDown = AceGUI:Create("Dropdown2")
     BiHuDropDown:SetLabel("庇护")

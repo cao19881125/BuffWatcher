@@ -284,12 +284,13 @@ function BuffWatcher:AutoAllocate()
 
 	local knight_result = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["PALADIN"],6)
 	if (#knight_result > 0) then
-		result.Knight["WangZhe"] = knight_result[1]
-		result.Knight["ZhengJiu"] = knight_result[2]
-		result.Knight["GuangMing"] = knight_result[3]
-		result.Knight["LiLiang"] = knight_result[4]
-		result.Knight["BiHu"] = knight_result[5]
-		result.Knight["ZhiHui"] = knight_result[6]
+		result.Knight["LiLiang"] = knight_result[1]
+		result.Knight["ZhiHui"] = knight_result[2]
+		result.Knight["ZhengJiu"] = knight_result[3]
+		result.Knight["GuangMing"] = knight_result[4]
+		result.Knight["WangZhe"] = knight_result[5]
+		result.Knight["BiHu"] = knight_result[6]
+
 	end
 
 	local warlock_result = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["WARLOCK"],4)
