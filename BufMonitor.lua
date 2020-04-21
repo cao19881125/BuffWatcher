@@ -145,7 +145,8 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     -- 检查力量
     exception_classs = {PlayerClassEnum["MAGE"],PlayerClassEnum["PRIEST"],
                         PlayerClassEnum["WARLOCK"],PlayerClassEnum["HUNTER"],
-                        PlayerClassEnum["PALADIN"],PlayerClassEnum["SHAMAN"]}
+                        PlayerClassEnum["PALADIN"],PlayerClassEnum["SHAMAN"],
+                        PlayerClassEnum["DRUID"]}
     checkgroupbuf("LiLiang",19838,25782,exception_classs)
 
     -- 检查拯救

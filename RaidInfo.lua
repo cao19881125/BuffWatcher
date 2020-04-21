@@ -94,6 +94,27 @@ function RaidInfo:GetNameList()
     return result
 end
 
+-- 返回有人队伍的数量
+function RaidInfo:GetGroupNum()
+    local result = 0
+
+    local function hasplayers(groupinfo)
+        for _,_ in pairs(groupinfo.players) do
+            return true
+        end
+        return false
+    end
+
+
+    for _,groupinfo in pairs(RaidInfo.ByGroup) do
+        if(hasplayers(groupinfo)) then
+            result = result + 1
+        end
+    end
+
+    return result
+end
+
 function RaidInfo:GenerateTestData()
     for i=1,8 do
         RaidInfo.ByGroup[i] = GroupInfo:new()
@@ -124,10 +145,6 @@ function RaidInfo:GenerateTestData()
     for i = 1,40 do
 
         local pc = play_class[math.fmod((i - 1),8) + 1]
-
-        if(pc == "PALADIN" and i > 32) then
-            pc = "MAGE"
-        end
 
         local groupid = math.modf((i - 1)/5) + 1
 

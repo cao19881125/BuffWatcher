@@ -307,12 +307,12 @@ function BuffWatcher:AutoAllocate()
 		Warlock = {}
 	}
 
+	local groupnum = RaidInfo:GetGroupNum()
 
-
-	result.PriestBlood = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["PRIEST"],8)
+	result.PriestBlood = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["PRIEST"],groupnum)
 	result.PriestSpirt = result.PriestBlood
-	result.MageIntelli = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["MAGE"],8)
-	result.DruidClaw = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["DRUID"],8)
+	result.MageIntelli = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["MAGE"],groupnum)
+	result.DruidClaw = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["DRUID"],groupnum)
 
 	local knight_result = BuffWatcher:AllocateCaculate(RaidInfo.ByClass["PALADIN"],6)
 	if (#knight_result > 0) then
@@ -450,11 +450,9 @@ function BuffWatcher:OnMonitorButtonCallback()
 end
 
 function BuffWatcher:Test()
-	local allocate_result = BWMainWindow:GetAllAllocation()
+	local groupnum = RaidInfo:GetGroupNum()
 
-	allocate_result.PriestSpirt = nil
-
-	DEFAULT_CHAT_FRAME:AddMessage(allocate_result.PriestBlood[1])
+	DEFAULT_CHAT_FRAME:AddMessage(groupnum)
 
 end
 
