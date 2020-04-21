@@ -39,6 +39,16 @@ BuffWatcher.consoleOptions = {
 				BWMainWindow:Hide()
 			end,
 			dialogHidden = true
+		},
+		["ts"] = {
+			order = 12,
+			name = "test",
+			desc = "test function",
+			type = 'execute',
+			func = function()
+				BuffWatcher:Test()
+			end,
+			dialogHidden = true
 		}
 	}
 }
@@ -58,7 +68,8 @@ local Default_Profile = {
 			AutoCheck = {
 				Interval = 30
 			}
-        }
+        },
+		LastAllocate = nil
     }
 }
 
@@ -70,6 +81,19 @@ BuffWatcher.events:SetScript("OnEvent", function(self, event, ...)
 	BuffWatcher[event](BuffWatcher, ...)
 end)
 
+
+local function InArray(array,value)
+    if(not array) then
+        return false
+    end
+    for _,v in pairs(array) do
+        if(v == value) then
+            return true
+        end
+    end
+
+    return false
+end
 
 function BuffWatcher:OnInitialize()
 	local acedb = LibStub("AceDB-3.0")
@@ -93,6 +117,7 @@ function BuffWatcher:OnInitialize()
 	BWCheckPlayerWindow:Hide()
 	BuffWatcher.events:SetScript("OnUpdate",BuffWatcher.OnUpdate)
 end
+
 
 function BuffWatcher:SetupMinimapBtn()
 	local LDB = LibStub("LibDataBroker-1.1", true)
@@ -120,8 +145,15 @@ end
 
 function BuffWatcher:OnEnable()
 
-	BuffWatcher:SetupMinimapBtn()
+	BuffWatcher.events:RegisterEvent("PLAYER_LOGOUT")
 
+	BuffWatcher:SetupMinimapBtn()
+	BuffWatcher:LoadLastAllocated()
+
+end
+
+function BuffWatcher:PLAYER_LOGOUT()
+	BuffWatcher:SaveAllocateData()
 end
 
 function BuffWatcher:OnDisable()
@@ -331,6 +363,83 @@ function BuffWatcher:OnAllocateButtonCallback()
 	end
 end
 
+function BuffWatcher:SaveAllocateData()
+	local allocate_result = BWMainWindow:GetAllAllocation()
+
+	allocate_result.PriestSpirt = nil
+
+	BWMainWindow.db.profile.LastAllocate = allocate_result
+end
+
+function BuffWatcher:LoadLastAllocated()
+--BWMainWindow.db.profile.LastAllocate = {
+--    PriestBlood = {[1] = "张三", [2] = "李四",..[8] = "王二"},
+--    PriestSpirt = {[1] = "张三", [2] = "李四",..[8] = "王二"},
+--    MageIntelli = {[1] = "张三", [2] = "李四",..[8] = "王二"},
+--    DruidClaw = {[1] = "张三", [2] = "李四",..[8] = "王二"},
+--    Knight = {["WangZhe"] = "张三",["ZhengJiu"]="李四",["GuangMing"]="王二",["LiLiang"]="..",["BiHu"] = "..",["ZhiHui"]=".."},
+--    Warlock = {["LuMang"] = "..",["YuanSu"] = "..",["YuYan"] = "..",["AnYing"] = ".."}
+--}
+
+	if (not BWMainWindow.db.profile.LastAllocate) then
+		return
+	end
+
+	BuffWatcher:OnInitButtonCallBack()
+
+	local nameList = RaidInfo:GetNameList()
+
+	local saveNum = 0
+	local listNum = 0
+
+	for _,bufarray in pairs(BWMainWindow.db.profile.LastAllocate) do
+		for _,name in pairs(bufarray) do
+			saveNum = saveNum + 1
+			if(InArray(nameList,name)) then
+				listNum = listNum + 1
+			end
+		end
+	end
+
+	if(listNum*2 < saveNum) then
+		-- 上次保存的人中有一半都不在当前团队中了，认为团队已经解散，不再加载上次保存的数据
+		return
+	end
+
+	local allocate_result = BWMainWindow.db.profile.LastAllocate
+
+	if(allocate_result.PriestBlood) then
+		for groupnum,name in pairs(allocate_result.PriestBlood) do
+			BWMainWindow:SetOneSureName("PriestBlood",groupnum,name)
+		end
+	end
+
+	if(allocate_result.MageIntelli) then
+		for groupnum,name in pairs(allocate_result.MageIntelli) do
+			BWMainWindow:SetOneSureName("MageIntelli",groupnum,name)
+		end
+	end
+
+	if(allocate_result.DruidClaw) then
+		for groupnum,name in pairs(allocate_result.DruidClaw) do
+			BWMainWindow:SetOneSureName("DruidClaw",groupnum,name)
+		end
+	end
+
+	if(allocate_result.Knight) then
+		for buftype,name in pairs(allocate_result.Knight) do
+			BWMainWindow:SetOneSureName(buftype,0,name)
+		end
+	end
+
+	if(allocate_result.Warlock) then
+		for buftype,name in pairs(allocate_result.Warlock) do
+			BWMainWindow:SetOneSureName(buftype,0,name)
+		end
+	end
+
+end
+
 function BuffWatcher:OnMonitorButtonCallback()
 	if(MonitorStat == 0) then
 		MonitorStat = 1
@@ -338,6 +447,15 @@ function BuffWatcher:OnMonitorButtonCallback()
 		MonitorStat = 0
 	end
 	BWMainWindow:SetMonitorStat(MonitorStat)
+end
+
+function BuffWatcher:Test()
+	local allocate_result = BWMainWindow:GetAllAllocation()
+
+	allocate_result.PriestSpirt = nil
+
+	DEFAULT_CHAT_FRAME:AddMessage(allocate_result.PriestBlood[1])
+
 end
 
 function BuffWatcher:OnMainWindowMoved()

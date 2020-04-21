@@ -83,6 +83,16 @@ function RaidInfo:LoadAllMember()
 
 end
 
+function RaidInfo:GetNameList()
+    local result = {}
+    for _,groupinfo in pairs(RaidInfo.ByGroup) do
+        for name,_ in pairs(groupinfo.players) do
+            table.insert(result,name)
+        end
+    end
+
+    return result
+end
 
 function RaidInfo:GenerateTestData()
     for i=1,8 do
