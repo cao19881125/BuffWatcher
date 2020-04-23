@@ -181,7 +181,7 @@ end
 --    ZhiHui    = {}
 --  }
 
-function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
+function Notifier:NotifyBufLack(buflack,tankHasZhengJiu,raidNotify,personNotify)
 
     local SendChannel = "RAID"  -- 团队
     --local SendChannel = "GUILD" -- 公会
@@ -200,17 +200,9 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
     }
 
 
-    local function in_tanks(name)
-        for _,n in pairs(tanks) do
-            if(n == name) then
-                return true
-            end
-        end
-        return false
-    end
 
     if(raidNotify) then
-        _G.SendChatMessage("BuffWatcher插件全团BUF检查:",SendChannel,nil,nil)
+        _G.SendChatMessage("=>>全团BUF检查<<=:",SendChannel,nil,nil)
     end
     local noProblem = true
     for i =1,8 do
@@ -220,12 +212,9 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
                     local str = "[" .. bufc .. "]" .. " <" .. i .. "队> "
                     local n = 0
                     for _,name in pairs(buflack[bufe][i]["Lacker"]) do
-                        if(bufe == "ZhengJiu" and in_tanks(name))then
-                            -- 占位符
-                        else
-                            str = str .. name .. " "
-                            n = n+1
-                        end
+
+                        str = str .. name .. " "
+                        n = n+1
 
                     end
                     if(n == 0) then
@@ -258,42 +247,26 @@ function Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
         end
     end
 
-    local function in_array(array,name)
-        for _,an in pairs(array) do
-            if an == name then
-                return true
-            end
+    for _,name in pairs(tankHasZhengJiu) do
+        local raidstr = name .. " 请点掉拯救"
+        local whisperstr = "BuffWatcher插件提醒:" .. name .. " 请点掉拯救"
+        if(raidNotify) then
+            _G.SendChatMessage(raidstr,SendChannel,nil,nil)
         end
 
-        return false
-    end
-
-    for _,name in pairs(tanks) do
-        local has_lack = false
-        for gn,bufarray in pairs(buflack.ZhengJiu) do
-            if(in_array(bufarray["Lacker"],name))then
-                has_lack = true
-            end
+        if(personNotify)then
+            _G.SendChatMessage(whisperstr,"WHISPER",nil,name)
         end
 
-        if(not has_lack)then
-            local raidstr = name .. " 请点掉拯救"
-            local whisperstr = "BuffWatcher插件提醒:" .. name .. " 请点掉拯救"
-            if(raidNotify) then
-                _G.SendChatMessage(raidstr,SendChannel,nil,nil)
-            end
-
-            if(personNotify)then
-                _G.SendChatMessage(whisperstr,"WHISPER",nil,name)
-            end
-
-            noProblem = false
-        end
+        noProblem = false
     end
 
     if(noProblem and raidNotify) then
         _G.SendChatMessage("Buff全部正常",SendChannel,nil,nil)
-    end
 
+    end
+    if(raidNotify) then
+        _G.SendChatMessage("=>>BuffWatcher<<=:",SendChannel,nil,nil)
+    end
 
 end

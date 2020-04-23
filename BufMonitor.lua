@@ -32,6 +32,7 @@ end
 --  }
 --  exception_players = {"张三","李四"}  --剔除名单，在此名单中的玩家不检查
 -- return = {
+--      缺buf的table
 --    PriestBlood = {
 --        [1] = {
 --            ["BufPlayer"] = "张三",  --责任人,
@@ -61,6 +62,9 @@ end
 --    LiLiang   = {}
 --    BiHu      = {}
 --    ZhiHui    = {}
+--  },
+--  {
+--      需要点掉拯救的坦克列表
 --  }
 
 function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
@@ -76,6 +80,8 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
         BiHu        = {},
         ZhiHui      = {}
     }
+
+    local tankHasZhengJiu = {}
     -- bufid
     -- 耐力:  小耐力：真言术：韧 10938   大耐力：坚韧祷言 21564
     -- 精神： 小精神：神圣之灵  27841    大精神：精神祷言 27681
@@ -114,8 +120,20 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
                         if(not InArray(tanks,name)) then
                             result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
                         end
+                    elseif(buftype == "ZhengJiu") then
+                        if(not InArray(tanks,name)) then
+                            result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
+                        end
                     else
                         result[buftype][i].Lacker[#result[buftype][i].Lacker + 1] = name
+                    end
+                end
+
+                if(buftype == "ZhengJiu"
+                        and InArray(tanks,name)
+                        and not p.isDead) then
+                    if(p.bufs[bufid1] or p.bufs[bufid2]) then
+                        table.insert(tankHasZhengJiu,name)
                     end
                 end
             end
@@ -145,8 +163,7 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     -- 检查力量
     exception_classs = {PlayerClassEnum["MAGE"],PlayerClassEnum["PRIEST"],
                         PlayerClassEnum["WARLOCK"],PlayerClassEnum["HUNTER"],
-                        PlayerClassEnum["PALADIN"],PlayerClassEnum["SHAMAN"],
-                        PlayerClassEnum["DRUID"]}
+                        PlayerClassEnum["PALADIN"],PlayerClassEnum["SHAMAN"]}
     checkgroupbuf("LiLiang",19838,25782,exception_classs)
 
     -- 检查拯救
@@ -165,6 +182,6 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"],PlayerClassEnum["SHAMAN"]}
     checkgroupbuf("ZhiHui",19854,25894,exception_classs)
 
-    return result
+    return result,tankHasZhengJiu
 end
 

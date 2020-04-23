@@ -149,7 +149,6 @@ function BuffWatcher:OnEnable()
 
 	BuffWatcher:SetupMinimapBtn()
 	BuffWatcher:LoadLastAllocated()
-
 end
 
 function BuffWatcher:PLAYER_LOGOUT()
@@ -240,6 +239,8 @@ function BuffWatcher:CheckoutBuf()
 	end
 
 	RaidInfo:LoadAllMember()
+
+
 	--RaidInfo:GenerateTestData()
 	local allocation_data = BWMainWindow.GetAllAllocation()
 	local players = {}
@@ -248,11 +249,10 @@ function BuffWatcher:CheckoutBuf()
 	end
 	local tanks = BWMainWindow:GetTankAllocation()
 	local exception_players = BWCheckPlayerWindow:GetExceptionPlayers()
-	local buflack = BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
-	--DEFAULT_CHAT_FRAME:AddMessage(buflack["PriestBlood"][1].Lacker[1])
+	local buflack,tankHasZhengJiu = BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
 
 	local raidNotify,personNotify = BWMainWindow:GetNotifyInfo()
-	Notifier:NotifyBufLack(buflack,tanks,raidNotify,personNotify)
+	Notifier:NotifyBufLack(buflack,tankHasZhengJiu,raidNotify,personNotify)
 end
 
 function BuffWatcher:OnNotifyBoxCallBack(value)
