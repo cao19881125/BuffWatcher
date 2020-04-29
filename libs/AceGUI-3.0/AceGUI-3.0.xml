@@ -8,6 +8,7 @@
 	<Script file="widgets\AceGUIContainer-NameFrame.lua"/>
 	<Script file="widgets\AceGUIContainer-Frame2.lua"/>
 	<Script file="widgets\AceGUIContainer-Frame3.lua"/>
+	<Script file="widgets\AceGUIContainer-BWFrame.lua"/>
 	<Script file="widgets\AceGUIContainer-InlineGroup.lua"/>
 	<Script file="widgets\AceGUIContainer-ScrollFrame.lua"/>
 	<Script file="widgets\AceGUIContainer-SimpleGroup.lua"/>
@@ -16,6 +17,7 @@
 	<Script file="widgets\AceGUIContainer-Window.lua"/>
 	<!-- Widgets -->
 	<Script file="widgets\AceGUIWidget-Button.lua"/>
+	<Script file="widgets\AceGUIWidget-NoTemplateButton.lua"/>
 	<Script file="widgets\AceGUIWidget-CheckBox.lua"/>
 	<Script file="widgets\AceGUIWidget-ColorPicker.lua"/>
 	<Script file="widgets\AceGUIWidget-DropDown.lua"/>

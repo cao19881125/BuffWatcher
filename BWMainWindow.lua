@@ -42,10 +42,10 @@ BWMainWindow = {
         NotifyCheckbox = {
             RaidBox = nil,
             PersonBox = nil
-        },
-        AutoCheck = {
-            IntervalEditBox = nil
         }
+        --AutoCheck = {
+        --    IntervalEditBox = nil
+        --}
     }
 }
 
@@ -380,6 +380,7 @@ function BWMainWindow:CreateTankGroup()
     return TankGroup,DropdownArray
 end
 
+
 function BWMainWindow:CreateConfigGroup()
 
     local FlowLayout3 = AceGUI:Create("SimpleGroup")
@@ -417,28 +418,44 @@ function BWMainWindow:CreateConfigGroup()
     NotifyGroup:AddChild(PersonCheckbox)
     BWMainWindow.Config.NotifyCheckbox.PersonBox = PersonCheckbox
 
-    local AutoCheckGroup = AceGUI:Create("InlineGroup")
-    AutoCheckGroup:SetLayout("Flow")
-    AutoCheckGroup:SetTitle("自动检查")
-    AutoCheckGroup:SetWidth(13*SCALE_LENGTH)
-    AutoCheckGroup:SetHeight(4*SCALE_LENGTH)
-    FlowLayout3:AddChild(AutoCheckGroup)
+    --local AutoCheckGroup = AceGUI:Create("InlineGroup")
+    --AutoCheckGroup:SetLayout("Flow")
+    --AutoCheckGroup:SetTitle("自动检查")
+    --AutoCheckGroup:SetWidth(13*SCALE_LENGTH)
+    --AutoCheckGroup:SetHeight(4*SCALE_LENGTH)
+    ----FlowLayout3:AddChild(AutoCheckGroup)
+    --
+    ----local CheckIntervalLabel = AceGUI:Create("Label")
+    ----CheckIntervalLabel:SetText("间隔(秒)")
+    ----CheckIntervalLabel:SetJustifyV("MIDDLE")
+    ----BWMainWindow:ChangeFontSize(CheckIntervalLabel.label,12)
+    ----CheckIntervalLabel:SetWidth(3*SCALE_LENGTH)
+    ----CheckIntervalLabel:SetHeight(4*SCALE_LENGTH)
+    ----AutoCheckGroup:AddChild(CheckIntervalLabel)
+    --
+    --local AutoCheckEditBox = AceGUI:Create("EditBox")
+    --AutoCheckEditBox:SetLabel("间隔(秒)")
+    --BWMainWindow:ChangeFontSize(AutoCheckEditBox.label,12)
+    --AutoCheckEditBox:SetWidth(10*SCALE_LENGTH)
+    --AutoCheckEditBox:SetHeight(4*SCALE_LENGTH)
+    --AutoCheckGroup:AddChild(AutoCheckEditBox)
+    --BWMainWindow.Config.AutoCheck.IntervalEditBox = AutoCheckEditBox
 
-    --local CheckIntervalLabel = AceGUI:Create("Label")
-    --CheckIntervalLabel:SetText("间隔(秒)")
-    --CheckIntervalLabel:SetJustifyV("MIDDLE")
-    --BWMainWindow:ChangeFontSize(CheckIntervalLabel.label,12)
-    --CheckIntervalLabel:SetWidth(3*SCALE_LENGTH)
-    --CheckIntervalLabel:SetHeight(4*SCALE_LENGTH)
-    --AutoCheckGroup:AddChild(CheckIntervalLabel)
+    local ShortFrameGroup = AceGUI:Create("InlineGroup")
+    ShortFrameGroup:SetLayout("Flow")
+    ShortFrameGroup:SetTitle("快捷按钮")
+    ShortFrameGroup:SetWidth(13*SCALE_LENGTH)
+    ShortFrameGroup:SetHeight(4*SCALE_LENGTH)
+    FlowLayout3:AddChild(ShortFrameGroup)
 
-    local AutoCheckEditBox = AceGUI:Create("EditBox")
-    AutoCheckEditBox:SetLabel("间隔(秒)")
-    BWMainWindow:ChangeFontSize(AutoCheckEditBox.label,12)
-    AutoCheckEditBox:SetWidth(10*SCALE_LENGTH)
-    AutoCheckEditBox:SetHeight(4*SCALE_LENGTH)
-    AutoCheckGroup:AddChild(AutoCheckEditBox)
-    BWMainWindow.Config.AutoCheck.IntervalEditBox = AutoCheckEditBox
+    local ShortFrameCheckbox = AceGUI:Create("CheckBox")
+    ShortFrameCheckbox:SetLabel("快捷按钮")
+    ShortFrameCheckbox:SetWidth(8*SCALE_LENGTH)
+    ShortFrameCheckbox:SetHeight(4*SCALE_LENGTH)
+    BWMainWindow:ChangeFontSize(ShortFrameCheckbox.text,12)
+    ShortFrameGroup:AddChild(ShortFrameCheckbox)
+    BWMainWindow.Config.ShortFrameCheckbox = ShortFrameCheckbox
+
 
     return FlowLayout3
 end
@@ -513,8 +530,12 @@ function BWMainWindow:GetNotifyInfo()
 end
 
 -- 获取自动检查间隔值
-function BWMainWindow:GetAutocheckIntervalEditText()
-    return BWMainWindow.Config.AutoCheck.IntervalEditBox:GetText()
+--function BWMainWindow:GetAutocheckIntervalEditText()
+--    return BWMainWindow.Config.AutoCheck.IntervalEditBox:GetText()
+--end
+
+function BWMainWindow:GetShortFrameChecked()
+    return BWMainWindow.Config.ShortFrameCheckbox:GetValue()
 end
 
 -- data: 包含所有职业名称的数据结构，如下
@@ -680,14 +701,16 @@ function BWMainWindow:SetMonitorStat(stat)
     end
 end
 
-function BWMainWindow:SetAutoCheckInterval(value)
-    if(type(value) ~= "number") then
-        return
-    end
-    BWMainWindow.Config.AutoCheck.IntervalEditBox:SetText(value)
+--function BWMainWindow:SetAutoCheckInterval(value)
+--    if(type(value) ~= "number") then
+--        return
+--    end
+--    BWMainWindow.Config.AutoCheck.IntervalEditBox:SetText(value)
+--end
+
+function BWMainWindow:SetShortFrameCheckBox(value)
+    BWMainWindow.Config.ShortFrameCheckbox:SetValue(value)
 end
-
-
 
 function BWMainWindow:RegistButtonCallBack(InitCallback,NotifyCallback,AllocateCallback,CheckCallback,MonitorCallback)
     BWMainWindow.Buttons.RestButton:SetCallback("OnClick", InitCallback)
@@ -702,8 +725,12 @@ function BWMainWindow:RegistNotifyBoxCallBack(NotifyBoxCallBack)
     BWMainWindow.Config.NotifyCheckbox.PersonBox:SetCallback("OnValueChanged", NotifyBoxCallBack)
 end
 
-function BWMainWindow:RegistAutocheckIntervalEditCallBack(AutocheckIntervalEditCallBack)
-    BWMainWindow.Config.AutoCheck.IntervalEditBox:SetCallback("OnEnterPressed", AutocheckIntervalEditCallBack)
+--function BWMainWindow:RegistAutocheckIntervalEditCallBack(AutocheckIntervalEditCallBack)
+--    BWMainWindow.Config.AutoCheck.IntervalEditBox:SetCallback("OnEnterPressed", AutocheckIntervalEditCallBack)
+--end
+
+function BWMainWindow:RegisterShortFrameCheckboxCallBack(ShortFrameCheckboxCallBack)
+    BWMainWindow.Config.ShortFrameCheckbox:SetCallback("OnValueChanged",ShortFrameCheckboxCallBack)
 end
 
 ------------------ Test Function--------------------

@@ -8,6 +8,7 @@ local RaidInfo = _G.RaidInfo
 local PlayerClassEnum = _G.PlayerClassEnum
 local Notifier = _G.Notifier
 local BufMonitor = _G.BufMonitor
+local BWShortFrame = _G.BWShortFrame
 
 local CreateFrame = CreateFrame
 
@@ -65,14 +66,21 @@ local Default_Profile = {
 				RaidNotify = true,
 				PersonNotify = false
 			},
-			AutoCheck = {
-				Interval = 30
+			--AutoCheck = {
+			--	Interval = 30
+			--},
+			ShortFrame = {
+				Show = false,
+				Position = {
+				point = "CENTER",
+                x = 0,
+                y = 0 }
 			}
+
         },
 		LastAllocate = nil
     }
 }
-
 BuffWatcher.events:SetScript("OnEvent", function(self, event, ...)
 	if not BuffWatcher[event] then
 		return
@@ -95,6 +103,18 @@ local function InArray(array,value)
     return false
 end
 
+function BuffWatcher:Test()
+	--local point, relativeTo, relativePoint, xOfs, yOfs = BWShortFrame.frame:GetPoint()
+	--BWShortFrame.frame:SetPoint(point,xOfs,yOfs)
+	--BWShortFrame.frame:StartMoving()
+	--BWShortFrame.frame:StopMovingOrSizing()
+	BWShortFrame:SetPosition(BWMainWindow.db.profile.MainWindow.ShortFrame.Position.point,
+			BWMainWindow.db.profile.MainWindow.ShortFrame.Position.x,
+			BWMainWindow.db.profile.MainWindow.ShortFrame.Position.y)
+	--BWShortFrame.frame:SetPoint("RIGHT",-197,115)
+	--BWShortFrame:SetPosition("RIGHT",0,78)
+end
+
 function BuffWatcher:OnInitialize()
 	local acedb = LibStub("AceDB-3.0")
 	BWMainWindow.db = acedb:New("BuffWatcherDB",Default_Profile)
@@ -103,6 +123,7 @@ function BuffWatcher:OnInitialize()
 	local factionGroup = UnitFactionGroup("player")
     BWMainWindow:CreateMainWindow(factionGroup)
 	BWCheckPlayerWindow:CreateWindow()
+	BWShortFrame:CreateMainWindow()
 
     BWMainWindow:RegistButtonCallBack(BuffWatcher.OnInitButtonCallBack,
 			BuffWatcher.OnNotifyButtonCallBack,
@@ -110,11 +131,23 @@ function BuffWatcher:OnInitialize()
 			BuffWatcher.OnCheckButtonCallback,
 			BuffWatcher.OnMonitorButtonCallback)
 	BWMainWindow:RegistNotifyBoxCallBack(BuffWatcher.OnNotifyBoxCallBack)
-	BWMainWindow:RegistAutocheckIntervalEditCallBack(BuffWatcher.OnAutocheckIntervalEditCallBack)
+	--BWMainWindow:RegistAutocheckIntervalEditCallBack(BuffWatcher.OnAutocheckIntervalEditCallBack)
+	BWMainWindow:RegisterShortFrameCheckboxCallBack(function(value)  return BuffWatcher:OnShortFrameCheckboxCallBack(value) end)
+	BWShortFrame:RegistreMoveFinishCallback(function(p,x,y) return BuffWatcher:OnShortFrameMoveFinished(p,x,y) end)
 	BWMainWindow:SetNotifyInfo(BWMainWindow.db.profile.MainWindow.NotifyBox.RaidNotify,BWMainWindow.db.profile.MainWindow.NotifyBox.PersonNotify)
-	BWMainWindow:SetAutoCheckInterval(BWMainWindow.db.profile.MainWindow.AutoCheck.Interval)
+	--BWMainWindow:SetAutoCheckInterval(BWMainWindow.db.profile.MainWindow.AutoCheck.Interval)
     BWMainWindow:Hide()
 	BWCheckPlayerWindow:Hide()
+
+	BWMainWindow:SetShortFrameCheckBox(BWMainWindow.db.profile.MainWindow.ShortFrame.Show)
+
+	if(BWMainWindow.db.profile.MainWindow.ShortFrame.Show) then
+
+		BWShortFrame:Show()
+	else
+		BWShortFrame:Hide()
+	end
+
 	BuffWatcher.events:SetScript("OnUpdate",BuffWatcher.OnUpdate)
 end
 
@@ -149,6 +182,28 @@ function BuffWatcher:OnEnable()
 
 	BuffWatcher:SetupMinimapBtn()
 	BuffWatcher:LoadLastAllocated()
+
+	--BWShortFrame.frame:StartMoving()
+	--BWShortFrame.frame:StopMovingOrSizing()
+	BWShortFrame:SetPosition(BWMainWindow.db.profile.MainWindow.ShortFrame.Position.point,
+			BWMainWindow.db.profile.MainWindow.ShortFrame.Position.x,
+			BWMainWindow.db.profile.MainWindow.ShortFrame.Position.y)
+
+	BWShortFrame:RegisterLeftButtonCallback(function()
+		BuffWatcher:OnCheckButtonCallback()
+	end)
+
+	BWShortFrame:RegisterRightButtonCallback(function()
+		BWMainWindow:Show()
+	end)
+	--BuffWatcher:TestBtn()
+    --
+	--BuffWatcher:Test()
+end
+
+function BuffWatcher:TestBtn()
+	BWShortFrame:CreateMainWindow()
+
 end
 
 function BuffWatcher:PLAYER_LOGOUT()
@@ -164,19 +219,32 @@ function BuffWatcher:InitData()
 end
 
 function BuffWatcher:OnUpdate()
-	if(MonitorStat ~= 1)then
-		return
+
+	if(BWMainWindow.db.profile.MainWindow.ShortFrame.Show) then
+		local current_time = GetTime()
+		if((current_time - last_update_time) < 1 ) then
+        	return
+    	end
+
+		BuffWatcher:ShortFrameUpdate()
+
+		last_update_time = current_time
 	end
 
-	local current_time = GetTime()
 
-	if((current_time - last_update_time) < BWMainWindow.db.profile.MainWindow.AutoCheck.Interval ) then
-        return
-    end
-
-	BuffWatcher:OnCheckButtonCallback()
-
-	last_update_time = current_time
+	--if(MonitorStat ~= 1)then
+	--	return
+	--end
+    --
+	--local current_time = GetTime()
+    --
+	--if((current_time - last_update_time) < BWMainWindow.db.profile.MainWindow.AutoCheck.Interval ) then
+     --   return
+    --end
+    --
+	--BuffWatcher:OnCheckButtonCallback()
+    --
+	--last_update_time = current_time
 
 end
 
@@ -228,6 +296,12 @@ function BuffWatcher:OnNotifyButtonCallBack()
 
 end
 
+function BuffWatcher:OnShortFrameMoveFinished(point,xOfs,yOfs)
+	BWMainWindow.db.profile.MainWindow.ShortFrame.Position.point = point
+	BWMainWindow.db.profile.MainWindow.ShortFrame.Position.x = xOfs
+	BWMainWindow.db.profile.MainWindow.ShortFrame.Position.y = yOfs
+end
+
 function BuffWatcher:OnCheckButtonCallback()
 	BuffWatcher:CheckoutBuf()
 end
@@ -261,13 +335,28 @@ function BuffWatcher:OnNotifyBoxCallBack(value)
 	BWMainWindow.db.profile.MainWindow.NotifyBox.PersonNotify = personNotify
 end
 
-function BuffWatcher:OnAutocheckIntervalEditCallBack()
-	local value = BWMainWindow:GetAutocheckIntervalEditText()
-	local nv = tonumber(value)
-	if(nv) then
-		BWMainWindow.db.profile.MainWindow.AutoCheck.Interval = nv
+--function BuffWatcher:OnAutocheckIntervalEditCallBack()
+--	local value = BWMainWindow:GetAutocheckIntervalEditText()
+--	local nv = tonumber(value)
+--	if(nv) then
+--		BWMainWindow.db.profile.MainWindow.AutoCheck.Interval = nv
+--	end
+--end
+
+function BuffWatcher:OnShortFrameCheckboxCallBack(value)
+
+	local checked = BWMainWindow:GetShortFrameChecked()
+
+	if(checked) then
+		BWShortFrame:Show()
+		BWMainWindow.db.profile.MainWindow.ShortFrame.Show = true
+	else
+		BWShortFrame:Hide()
+		BWMainWindow.db.profile.MainWindow.ShortFrame.Show = false
 	end
+
 end
+
 
 function BuffWatcher:AllocateCaculate(data,pn)
 
@@ -449,10 +538,30 @@ function BuffWatcher:OnMonitorButtonCallback()
 	BWMainWindow:SetMonitorStat(MonitorStat)
 end
 
-function BuffWatcher:Test()
-	local groupnum = RaidInfo:GetGroupNum()
+function BuffWatcher:ShortFrameUpdate()
+	--local groupnum = RaidInfo:GetGroupNum()
+    --
+	--DEFAULT_CHAT_FRAME:AddMessage(groupnum)
 
-	DEFAULT_CHAT_FRAME:AddMessage(groupnum)
+	if(not IsInRaid()) then
+		return
+	end
+
+	RaidInfo:LoadAllMember()
+
+	--RaidInfo:GenerateTestData()
+	local allocation_data = BWMainWindow.GetAllAllocation()
+	local players = {}
+	for gn,gp in pairs(RaidInfo.ByGroup) do
+		players[gn] = gp.players
+	end
+	local tanks = BWMainWindow:GetTankAllocation()
+	local exception_players = BWCheckPlayerWindow:GetExceptionPlayers()
+	local buflack,tankHasZhengJiu = BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
+
+	local _,checknum = BWCheckPlayerWindow:GetPlayerNums()
+
+	BWShortFrame:SetBufLackInfo(buflack,tankHasZhengJiu,checknum)
 
 end
 

@@ -12,5 +12,6 @@ Notifier.lua
 BufMonitor.lua
 RaidInfo.lua
 BWCheckPlayerWindow.lua
+BWShortFrame.lua
 BWMainWindow.lua
 BuffWatcher.lua

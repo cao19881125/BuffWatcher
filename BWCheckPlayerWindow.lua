@@ -120,3 +120,28 @@ function BWCheckPlayerWindow:GetExceptionPlayers()
 
     return result
 end
+
+-- return : 总人数,参与检查的人数
+function BWCheckPlayerWindow:GetPlayerNums()
+
+    local totalnum = 0
+    local checknum = 0
+
+    for i = 1,8 do
+        for j = 1,5 do
+            local checked = BWCheckPlayerWindow.PartyCheckBox[i][j]:GetValue()
+            local name = BWCheckPlayerWindow.PartyCheckBox[i][j].text:GetText()
+
+            if(name ~= "<空>") then
+               totalnum = totalnum + 1
+            end
+            if(checked and name ~= "<空>") then
+
+                checknum = checknum + 1
+            end
+        end
+    end
+
+    return totalnum,checknum
+
+end
