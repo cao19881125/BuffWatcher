@@ -109,7 +109,8 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
                         and not p.isDead
                         and not p.bufs[bufid1]
                         and not p.bufs[bufid2]
-                        and not InArray(exception_classs,p.class)) then
+                        and not InArray(exception_classs,p.class)
+                        and result[buftype][i]["BufPlayer"]) then
                     --local str = "name:"..name .. " buftype:" .. buftype .. " class:"..p.class
                     --DEFAULT_CHAT_FRAME:AddMessage(str)
                     if(buftype == "LiLiang" and p.class == PlayerClassEnum["DRUID"] ) then
