@@ -88,11 +88,11 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     -- 智力： 小智力：奥术智慧 10157     大智力：奥术光辉 23028
     -- 爪子： 小爪子：野性印记 9885      大爪子：野性赐福 21850
     -- 王者： 小王者：王者祝福 20217     大王者：强效王者祝福 25898
-    -- 力量： 小力量：力量祝福 19838     大力量：强效力量祝福 25782
+    -- 力量： 小力量：力量祝福 25291     大力量：强效力量祝福 25916
     -- 拯救： 小拯救：拯救祝福 1038      大拯救：强效拯救祝福 25895
     -- 庇护： 小庇护：庇护祝福 20914     大庇护：强效庇护祝福 25899
     -- 光明： 小光明：光明祝福 19979     大光明：强效光明祝福 25890
-    -- 智慧： 小智慧：智慧祝福 19854     大智慧：强效智慧祝福 25894
+    -- 智慧： 小智慧：智慧祝福 25290     大智慧：强效智慧祝福 25918
     local PlayerClassEnum = _G.PlayerClassEnum
     local function checkgroupbuf(buftype,bufid1,bufid2,exception_classs)
         for i = 1,8 do
@@ -165,7 +165,7 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
     exception_classs = {PlayerClassEnum["MAGE"],PlayerClassEnum["PRIEST"],
                         PlayerClassEnum["WARLOCK"],PlayerClassEnum["HUNTER"],
                         PlayerClassEnum["PALADIN"],PlayerClassEnum["SHAMAN"]}
-    checkgroupbuf("LiLiang",19838,25782,exception_classs)
+    checkgroupbuf("LiLiang",25291,25916,exception_classs)
 
     -- 检查拯救
     exception_classs = {PlayerClassEnum["SHAMAN"]}
@@ -181,7 +181,7 @@ function BufMonitor:BufCheck(allocation_data,players,tanks,exception_players)
 
     -- 检查智慧
     exception_classs = {PlayerClassEnum["WARRIOR"],PlayerClassEnum["ROGUE"],PlayerClassEnum["SHAMAN"]}
-    checkgroupbuf("ZhiHui",19854,25894,exception_classs)
+    checkgroupbuf("ZhiHui",25290,25918,exception_classs)
 
     return result,tankHasZhengJiu
 end
